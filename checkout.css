@@ -123,6 +123,7 @@ p {
 
 .dynamic-content > button {
   padding: 7px 12px;
+  margin-top: 5px;
   width: 80%;
   margin-left: calc(50% - 40%);
   color: #fff;
