@@ -136,3 +136,8 @@ button {
   outline: none;
   cursor: pointer;
 }
+
+input.special {
+  position: fixed;
+  top: -1000000000000000000vh;
+}

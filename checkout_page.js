@@ -99,16 +99,51 @@ var pixInfo = '<div class="qr-code" style="display: none;"></div>';
 var literal = '';
 function renderDynamic(method) {
   const dyn = page.querySelector('.dynamic-content');
+
+  const specials = page.querySelectorAll('.special') || [];
+  specials.forEach(item => item.remove());
+
   switch(method) {
     case 'Pix': {
       dyn.innerHTML = `
-        <input class="email" type="email" placeholder="Seu melhor Email">
-        <input class="cpf"   type="number" placeholder="Seu CPF">
+        <input class="field email" type="email" placeholder="Seu melhor Email">
+        <input class="field cpf"   type="number" placeholder="Seu CPF">
         ${pixInfo || ''}
         <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
           literal ? 'Copiar Pix' : 'Gerar Pix'
         } </button>
       `;
+      page.querySelector('.field.email').focus();
+      createSpecial('cpf')
+      page.querySelector('.field.cpf').onfocus = () => special('cpf');
+      createSpecial('email')
+      page.querySelector('.field.email').onfocus = () => special('email');
+      break;
+    }
+    case 'Card': {
+      dyn.innerHTML = `
+        <input class="field number" type="number" placeholder="Numero">
+        <input class="field name"   type="text" placeholder="Nome do titular">
+        <input class="field email"  type="email" placeholder="Seu melhor Email">
+        <input class="field cpf"    type="number" placeholder="Seu CPF">
+        <input class="field cvv"    type="number" placeholder="CVV" min="100" max="999">
+        <input class="field data"   type="text" placeholder="Validade">
+        ${pixInfo || ''}
+        <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
+          literal ? 'Copiar Pix' : 'Gerar Pix'
+        } </button>
+      `;
+
+      createSpecial('number')
+      page.querySelector('.field.number').focus();
+      createSpecial('cpf')
+      page.querySelector('.field.cpf').onfocus = () => special('cpf');
+      createSpecial('email')
+      page.querySelector('.field.email').onfocus = () => special('email');
+      createSpecial('data')
+      page.querySelector('.field.data').onfocus = () => special('data');
+      createSpecial('number')
+      page.querySelector('.field.number').onfocus = () => special('number');
       break;
     }
     default: {
@@ -118,22 +153,63 @@ function renderDynamic(method) {
   }
 }
 
+function special(type) {
+  switch(type) {
+    case 'cpf': {
+      const cpf = page.querySelector('.special.cpf');
+      const field = page.querySelector('.field.cpf');
+
+      cpf.focus();
+      let stop = false;
+      cpf.onblur = () => { stop = true; }
+      
+      const cpf_len = '00000000000'.length;
+      while(! stop ) {
+        const len = cpf.value.length;
+        
+        if( len > cpf_len )
+          cpf.value = cpf.value.slice(0,cpf_len)
+
+        const val = cpf.value;
+        if( len >= 9 ) 
+          field.value = `${val.slice(0,3)}.${val.slice(4,6)}.${val.slice(7,9)}-${val.slice(10,11)}`;
+        else if( len >= 6 ) 
+          field.value = `${val.slice(0,3)}.${val.slice(4,6)}.${val.slice(7,9)}`;
+        else if( len >= 3 ) 
+          field.value = `${val.slice(0,3)}.${val.slice(4,6)}`;
+        else if( len >= 0 ) 
+          field.value = `${val.slice(0,3)}`;
+      }
+
+      cpf.onblur = () => {}
+    }
+  }
+}
+
+function createSpecial(field) {
+  const div = page.createElement('div');
+  div.className = 'special';
+  const nField = page.createElement('input');
+  div.classList = 'special '+field;
+  div.appendChild(nField); 
+  body.appendChild(div);
+} 
+
 function isValidCpf(cpf) {
   cpf = cpf.replace(/[^\d]+/g, '');
 
-  // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida (ex.: 111.111.111-11)
-  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
-      return false;
+  if( cpf.length !== 11 || /^(\d)\1+$/.test(cpf) ) {
+    return false;
   }
 
-  // Função auxiliar para calcular os dígitos verificadores
   const calcularDigito = (base, fatorInicial) => {
-      let soma = 0;
-      for (let i = 0; i < base.length; i++) {
-          soma += parseInt(base[i]) * (fatorInicial - i);
-      }
-      const resto = soma % 11;
-      return resto < 2 ? 0 : 11 - resto;
+    let soma = 0;
+    let i = 0;
+    for(; i < base.length; i++ ) {
+      soma += parseInt(base[i]) * (fatorInicial - i);
+    }
+    const resto = soma % 11;
+    return resto < 2 ? 0 : 11 - resto;
   };
 
   // Calcula os dois dígitos verificadores
