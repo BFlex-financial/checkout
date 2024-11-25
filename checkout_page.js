@@ -25,9 +25,9 @@ const product = page.createElement('div');
 product.className = 'product';
     
   /* Product image */
-  const thumbnail = page.createElement('div');
+  const thumbnail = page.createElement('img');
   thumbnail.className = 'thumbnail';
-  thumbnail.style = `background: url('${products[0].data.thumbnail}');`
+  thumbnail.src = products[0].data.thumbnail;
   product.appendChild(thumbnail);
   
   /* Info display */
