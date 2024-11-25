@@ -148,36 +148,37 @@ function renderDynamic(method) {
 }
 
 function special(type) {
-  stop = false;
-  switch(type) {
+  switch (type) {
     case 'cpf': {
-      const cpf = page.querySelector('.special.cpf > input');
-      const field = page.querySelector('.field.cpf');
+      const cpf = document.querySelector('.special.cpf > input');
+      const field = document.querySelector('.field.cpf');
 
-      cpf.focus();
+      if (!cpf || !field) return;
+
+      cpf.addEventListener('input', () => {
+        const rawValue = cpf.value.replace(/\D/g, ''); // Remove tudo que não é número
+        const formattedValue = formatCPF(rawValue);
+        cpf.value = rawValue.slice(0, 11); // Limita ao tamanho do CPF
+        field.value = formattedValue;
+      });
       
-      const cpf_len = '00000000000'.length;
-      while(! stop ) {
-        const len = cpf.value.length;
-        
-        if( len > cpf_len )
-          cpf.value = cpf.value.slice(0,cpf_len)
-
-        const val = cpf.value;
-        if( len >= 9 ) 
-          field.value = `${val.slice(0,3)}.${val.slice(4,6)}.${val.slice(7,9)}-${val.slice(10,11)}`;
-        else if( len >= 6 ) 
-          field.value = `${val.slice(0,3)}.${val.slice(4,6)}.${val.slice(7,9)}`;
-        else if( len >= 3 ) 
-          field.value = `${val.slice(0,3)}.${val.slice(4,6)}`;
-        else if( len >= 0 ) 
-          field.value = `${val.slice(0,3)}`;
-
-        setTimeout(() => {}, 100)
-      }
+      break;
     }
   }
 }
+
+function formatCPF(value) {
+  if (value.length > 9) {
+    return `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9, 11)}`;
+  } else if (value.length > 6) {
+    return `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6)}`;
+  } else if (value.length > 3) {
+    return `${value.slice(0, 3)}.${value.slice(3)}`;
+  } else {
+    return value;
+  }
+}
+
 
 function createSpecial(field) {
   const div = page.createElement('div');
