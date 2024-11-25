@@ -94,50 +94,38 @@ body.appendChild(center);
 renderDynamic('Pix');
 
 /* functions */
-var stop = false;
+
 var pixInfo = '<div class="qr-code" style="display: none;"></div>';
 var literal = '';
 function renderDynamic(method) {
   const dyn = page.querySelector('.dynamic-content');
-
-  const specials = page.querySelectorAll('.special') || [];
-  specials.forEach(item => item.remove());
-
   switch(method) {
     case 'Pix': {
       dyn.innerHTML = `
-        <input class="field email" type="email" placeholder="Seu melhor Email">
-        <input class="field cpf"   type="number" placeholder="Seu CPF">
+        <input class="email" type="email" placeholder="Seu melhor Email">
+        <input class="cpf"   type="number" placeholder="Seu CPF">
         ${pixInfo || ''}
         <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
           literal ? 'Copiar Pix' : 'Gerar Pix'
         } </button>
       `;
-      page.querySelector('.field.email').focus();
-      createSpecial('cpf')
-      page.querySelector('.field.cpf').onfocus = () => special('cpf');
-      createSpecial('email')
-      page.querySelector('.field.email').onfocus = () => special('email');
+      page.querySelector('.email').focus();
       break;
     }
     case 'Card': {
       dyn.innerHTML = `
-        <input class="field number" type="number" placeholder="Numero" onfocus="special('number')" onblur="stop = true;">
-        <input class="field name"   type="text" placeholder="Nome do titular" onblur="stop = true;">
-        <input class="field email"  type="email" placeholder="Seu melhor Email" onfocus="special('email')" onblur="stop = true;">
-        <input class="field cpf"    type="number" placeholder="Seu CPF" onfocus="special('cpf')">
-        <input class="field cvv"    type="number" placeholder="CVV" min="100" max="999">
-        <input class="field data"   type="text" placeholder="Validade" onfocus="special('data')" onblur="stop = true;">
+        <input class="number" type="number" placeholder="Numero">
+        <input class="name"   type="text" placeholder="Nome do titular">
+        <input class="email"  type="email" placeholder="Seu melhor Email">
+        <input class="cpf"    type="number" placeholder="Seu CPF">
+        <input class="cvv"    type="number" placeholder="CVV" min="100" max="999">
+        <input class="data"   type="text" placeholder="Validade">
         ${pixInfo || ''}
         <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
           literal ? 'Copiar Pix' : 'Gerar Pix'
         } </button>
       `;
-
-      createSpecial('number')
-      createSpecial('cpf')
-      createSpecial('email')
-      createSpecial('data')
+      page.querySelector('.number').focus();
       break;
     }
     default: {
@@ -147,71 +135,22 @@ function renderDynamic(method) {
   }
 }
 
-function special(type) {
-  switch (type) {
-    case 'cpf': {
-      const cpf = document.querySelector('.special.cpf > input');
-      const field = document.querySelector('.field.cpf');
-
-      if (!cpf || !field) return;
-
-      cpf.focus();
-
-      cpf.addEventListener('input', () => {
-        const rawValue = cpf.value.replace(/\D/g, ''); // Remove tudo que não é número
-        const formattedValue = formatCPF(rawValue);
-        cpf.value = rawValue.slice(0, 11); // Limita ao tamanho do CPF
-        field.value = formattedValue;
-      });
-      
-      break;
-    }
-  }
-}
-
-function formatCPF(value) {
-  // Formata o CPF conforme o número de dígitos
-  const part1 = value.slice(0, 3);
-  const part2 = value.slice(3, 6);
-  const part3 = value.slice(6, 9);
-  const part4 = value.slice(9, 11);
-
-  if (value.length > 9) {
-    return `${part1}.${part2}.${part3}-${part4}`;
-  } else if (value.length > 6) {
-    return `${part1}.${part2}.${part3}`;
-  } else if (value.length > 3) {
-    return `${part1}.${part2}`;
-  } else {
-    return part1;
-  }
-}
-
-function createSpecial(field) {
-  const div = page.createElement('div');
-  div.className = 'special';
-  const nField = page.createElement('input');
-  div.classList.add('special');
-  div.classList.add(field);
-  div.appendChild(nField); 
-  body.appendChild(div);
-} 
-
 function isValidCpf(cpf) {
   cpf = cpf.replace(/[^\d]+/g, '');
 
-  if( cpf.length !== 11 || /^(\d)\1+$/.test(cpf) ) {
-    return false;
+  // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida (ex.: 111.111.111-11)
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+      return false;
   }
 
+  // Função auxiliar para calcular os dígitos verificadores
   const calcularDigito = (base, fatorInicial) => {
-    let soma = 0;
-    let i = 0;
-    for(; i < base.length; i++ ) {
-      soma += parseInt(base[i]) * (fatorInicial - i);
-    }
-    const resto = soma % 11;
-    return resto < 2 ? 0 : 11 - resto;
+      let soma = 0;
+      for (let i = 0; i < base.length; i++) {
+          soma += parseInt(base[i]) * (fatorInicial - i);
+      }
+      const resto = soma % 11;
+      return resto < 2 ? 0 : 11 - resto;
   };
 
   // Calcula os dois dígitos verificadores
