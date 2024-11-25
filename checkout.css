@@ -81,6 +81,7 @@ p {
   align-items: center;
   justify-content: center;
   gap: 0 5px;
+  margin-top: 15px;
 }
 
 .dynamic-content {
@@ -94,13 +95,16 @@ p {
 
 .dynamic-content > input {
   width: 100%;
-  padding: 5px 12px;
+  padding: 7px 12px;
   color: #333;
   -webkit-text-stroke-color: #333;
+  margin-top: 5px;
+  border: #888 1px solid;
+  border-radius: 6px;
 }
 
 .dynamic-content > div {
-  background: #fff;
+  background: #d9d9d9;
   border: #333 1px solid;
   width: 120px;
   height: 120px;
@@ -110,4 +114,18 @@ p {
   align-items: center;
   margin-top: 12px;
   margin-bottom: 12px;
+}
+
+.dynamic-content > button {
+  padding: 7px 12px;
+  width: 80%;
+  margin-left: calc(50% - 40%);
+  color: #fff;
+  border: none;
+  background: #4444ff;
+}
+
+button {
+  outline: none;
+  cursor: pointer;
 }
