@@ -95,15 +95,16 @@ renderDynamic('Pix');
 
 /* functions */
 
+let pixInfo = '<div class="qr-code" style="display: none;"></div>';
+let literal = '';
 function renderDynamic(method) {
   const dyn = page.querySelector('.dynamic-content');
   switch(method) {
     case 'Pix': {
       dyn.innerHTML = `
-        <input type="email" placeholder="Seu melhor Email">
-        <input type="number" placeholder="Seu CPF">
-        <div class="qr-code" style="display: none;">
-        </div>
+        <input class="email" type="email" placeholder="Seu melhor Email">
+        <input class="cpf"   type="number" placeholder="Seu CPF">
+        ${pixInfo}
         <button onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> Gerar Pix </button>
       `;
       break;
@@ -120,10 +121,25 @@ function generate() {
   if( gen ) gen = !gen;
   else return;
 
-  fetch(`${api}/payments/create`, {
+  fetch(`${api}/payment/create`, {
+    method: 'POST',
     headers: {
       'Content-type': 'application/json',
-
-    }
+      'Authorization-key': 'Bearer NON_KEY'
+    },
+    body: JSON.stringify({
+      "amount": 0.21,
+      "method": "Checkout",
+      "checkout_id": checkout.id,
+      "payment_type": {
+        "method": "Pix",
+        "payer_email": page.querySelector(".email").value,
+        "payer_cpf": page.querySelector(".cpf").value,
+        "amount": 0.0
+      }
+    })
+  }).then(x => x.json()).then((res) => {
+    pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${res.data.qr_code.base64}"></div>`;
+    literal = res.data.qr_code.literal;
   })
 }
