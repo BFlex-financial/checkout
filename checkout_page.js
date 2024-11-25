@@ -162,11 +162,25 @@ function special(type) {
         const formattedValue = formatCPF(rawValue);
         cpf.value = rawValue.slice(0, 11); // Limita ao tamanho do CPF
         field.value = formattedValue;
+
+        const newPosition = calculateCursorPosition(cursorPosition, cpf.value);
+        cpf.setSelectionRange(newPosition, newPosition);
       });
       
       break;
     }
   }
+}
+
+function calculateCursorPosition(oldPosition, formattedValue) {
+  // Calcula a nova posição do cursor ignorando caracteres extras (ponto e hífen)
+  let offset = 0;
+  for (let i = 0; i < oldPosition; i++) {
+    if (formattedValue[i] === '.' || formattedValue[i] === '-') {
+      offset++;
+    }
+  }
+  return oldPosition + offset;
 }
 
 function formatCPF(value) {
