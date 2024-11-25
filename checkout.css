@@ -1,6 +1,8 @@
 .box { width: 98vw; margin-left: 1vw; }
 .product { display: flex; align-items: center; }
-.product > * { height: 80px; }
-.thumbnail { border-radius: 10px; width: 80px; height: 80px; }
+.product > * { height: 100px; }
+.thumbnail { border-radius: 10px; width: 100px; height: 100px; }
 p { font-family: Calibri, 'sans-serif'; }
 .product > div { display: flex; align-items: center; }
+.name { font-weight: bold; font-size: 20px; }
+.description { font-size: 15px; }

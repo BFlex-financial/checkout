@@ -38,12 +38,14 @@ product.className = 'product';
       const nameContent = products[0].data.name || "Uknown";
       const name = page.createTextNode(nameContent);
       productName.appendChild(name);
+      productName.className = 'name'
       align.appendChild(productName)
 
       const productDescription = page.createElement('p');
       const descriptionContent = products[0].data.description || "Uknown";
       const description = page.createTextNode(descriptionContent);
       productDescription.appendChild(description);
+      productDescription.className = 'description'
       align.appendChild(productDescription)
 
     info.appendChild(align);
