@@ -140,5 +140,5 @@ button {
 div.special,
 div.special > * {
   position: fixed;
-  display: none;
+  top: -1000000000000000000000vh;
 }

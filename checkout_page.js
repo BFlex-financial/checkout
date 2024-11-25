@@ -94,7 +94,7 @@ body.appendChild(center);
 renderDynamic('Pix');
 
 /* functions */
-
+var stop = false;
 var pixInfo = '<div class="qr-code" style="display: none;"></div>';
 var literal = '';
 function renderDynamic(method) {
@@ -122,12 +122,12 @@ function renderDynamic(method) {
     }
     case 'Card': {
       dyn.innerHTML = `
-        <input class="field number" type="number" placeholder="Numero">
-        <input class="field name"   type="text" placeholder="Nome do titular">
-        <input class="field email"  type="email" placeholder="Seu melhor Email">
-        <input class="field cpf"    type="number" placeholder="Seu CPF">
+        <input class="field number" type="number" placeholder="Numero" onfocus="special('number')" onblur="stop = true;">
+        <input class="field name"   type="text" placeholder="Nome do titular" onblur="stop = true;">
+        <input class="field email"  type="email" placeholder="Seu melhor Email" onfocus="special('email')" onblur="stop = true;">
+        <input class="field cpf"    type="number" placeholder="Seu CPF" onfocus="special('cpf')">
         <input class="field cvv"    type="number" placeholder="CVV" min="100" max="999">
-        <input class="field data"   type="text" placeholder="Validade">
+        <input class="field data"   type="text" placeholder="Validade" onfocus="special('data')" onblur="stop = true;">
         ${pixInfo || ''}
         <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
           literal ? 'Copiar Pix' : 'Gerar Pix'
@@ -135,15 +135,9 @@ function renderDynamic(method) {
       `;
 
       createSpecial('number')
-      page.querySelector('.field.number').focus();
       createSpecial('cpf')
-      page.querySelector('.field.cpf').onfocus = () => special('cpf');
       createSpecial('email')
-      page.querySelector('.field.email').onfocus = () => special('email');
       createSpecial('data')
-      page.querySelector('.field.data').onfocus = () => special('data');
-      createSpecial('number')
-      page.querySelector('.field.number').onfocus = () => special('number');
       break;
     }
     default: {
@@ -154,14 +148,13 @@ function renderDynamic(method) {
 }
 
 function special(type) {
+  stop = false;
   switch(type) {
     case 'cpf': {
       const cpf = page.querySelector('.special.cpf');
       const field = page.querySelector('.field.cpf');
 
       cpf.focus();
-      let stop = false;
-      cpf.onblur = () => { stop = true; }
       
       const cpf_len = '00000000000'.length;
       while(! stop ) {
@@ -180,8 +173,6 @@ function special(type) {
         else if( len >= 0 ) 
           field.value = `${val.slice(0,3)}`;
       }
-
-      cpf.onblur = () => {}
     }
   }
 }
