@@ -155,6 +155,8 @@ function special(type) {
 
       if (!cpf || !field) return;
 
+      cpf.focus();
+
       cpf.addEventListener('input', () => {
         const rawValue = cpf.value.replace(/\D/g, ''); // Remove tudo que não é número
         const formattedValue = formatCPF(rawValue);
