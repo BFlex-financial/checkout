@@ -118,8 +118,43 @@ function renderDynamic(method) {
   }
 }
 
+function isValidCpf(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+
+  // Verifica se o CPF tem 11 dígitos ou é uma sequência repetida (ex.: 111.111.111-11)
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) {
+      return false;
+  }
+
+  // Função auxiliar para calcular os dígitos verificadores
+  const calcularDigito = (base, fatorInicial) => {
+      let soma = 0;
+      for (let i = 0; i < base.length; i++) {
+          soma += parseInt(base[i]) * (fatorInicial - i);
+      }
+      const resto = soma % 11;
+      return resto < 2 ? 0 : 11 - resto;
+  };
+
+  // Calcula os dois dígitos verificadores
+  const base = cpf.slice(0, 9); // Primeiros 9 dígitos
+  const digito1 = calcularDigito(base, 10);
+  const digito2 = calcularDigito(base + digito1, 11);
+
+  // Verifica se os dígitos calculados coincidem com os do CPF informado
+  return cpf === base + digito1.toString() + digito2.toString();
+}
+
 let gen = true;
 function generate() {
+  const email = page.querySelector(".email").value;
+  if(! email.match(/\w+[@]{1}[a-Z0-9]+[.]{1}\w*/g) ) 
+    return alert("Email invalido");
+  
+  const cpf = page.querySelector(".cpf").value;
+  if(! isValidCpf(cpf) ) 
+    return alert("Email invalido");
+
   if( gen ) gen = !gen;
   else {
     navigator.clipboard.writeText(literal);
@@ -138,8 +173,8 @@ function generate() {
       "checkout_id": checkout.id,
       "payment_type": {
         "method": "Pix",
-        "payer_email": page.querySelector(".email").value,
-        "payer_cpf": page.querySelector(".cpf").value,
+        "payer_email": email,
+        "payer_cpf": cpf,
         "amount": 12.0
       }
     })
