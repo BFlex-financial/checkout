@@ -102,8 +102,10 @@ function renderDynamic(method) {
   switch(method) {
     case 'Pix': {
       dyn.innerHTML = `
-        <input class="email" type="email" placeholder="Seu melhor Email">
-        <input class="cpf"   type="number" placeholder="Seu CPF">
+        ${
+          literal ? '' : `<input class="email" type="email" placeholder="Seu melhor Email">
+                          <input class="cpf"   type="number" placeholder="Seu CPF">`
+        }
         ${pixInfo || ''}
         <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
           literal ? 'Copiar Pix' : 'Gerar Pix'
@@ -199,5 +201,22 @@ function generate() {
     pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${res.data.qr_code.base64}"></div>`;
     literal = res.data.qr_code.literal;
     renderDynamic('Pix');
+    page.querySelector('.row').style = 'display: none;';
+
+    (function loop() {
+      fetch(`${api}/payment/get/checkout/${checkout.id}/${res.data.payment_id}`, {
+        method: 'GET',
+        headers: { 'Content-type': 'application/json' },
+      }).then(x => x.json()).then((res) => {
+        if( res.data.status != "approved" ) {
+          setTimeout(() => {
+            loop();
+          }, 5000)
+        }
+        else {
+          alert("Pagamento aprovado!");
+        }
+      })
+    })();
   })
 }
