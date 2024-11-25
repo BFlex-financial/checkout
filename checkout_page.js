@@ -42,7 +42,7 @@ product.className = 'product';
     const productDescription = page.createElement('p');
     const descriptionContent = products[0].data.description || "Uknown";
     const description = page.createTextNode(descriptionContent);
-    productName.appendChild(description);
+    productDescription.appendChild(description);
     info.appendChild(productDescription)
 
   product.appendChild(info);
