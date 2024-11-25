@@ -137,7 +137,8 @@ button {
   cursor: pointer;
 }
 
-input.special {
+div.special,
+div.special > * {
   position: fixed;
   display: none;
 }
