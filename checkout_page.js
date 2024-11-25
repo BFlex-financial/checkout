@@ -4,7 +4,7 @@ const body = page.querySelector('body');
 
 /* titulo */
 const titleElement = page.createElement('title');
-const titleContent = `Payment not found`;
+const titleContent = `BFlex payment - Checkout - ${products[0].data.name}`;
 const titleNode = page.createTextNode(titleContent);
 titleElement.appendChild(titleNode);
 head.appendChild(titleElement);
@@ -16,13 +16,13 @@ faviconElement.href = 'https://BFlex-financial.github.io/checkout/favicon.png'
 head.appendChild(faviconElement);
 
 /* div */
-body.style = "width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;";
+body.style = "width: 100vw; min-height: 100vh; display: flex; align-items: center; justify-content: center;";
 const center = page.createElement('div');
 center.className = 'box';
   
 /* Product info */
 const product = page.createElement('div');
-row.className = 'product';
+product.className = 'product';
     
   /* Product image */
   const thumbnail = page.createElement('div');
@@ -37,6 +37,11 @@ row.className = 'product';
     const nameContent = products[0].data.name || "Uknown";
     const name = page.createTextNode(nameContent);
     productName.appendChild(name);
+
+    const productDescription = page.createElement('p');
+    const descriptionContent = products[0].data.description || "Uknown";
+    const description = page.createTextNode(descriptionContent);
+    productName.appendChild(description);
 
   product.appendChild(info);
 
