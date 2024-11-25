@@ -172,6 +172,8 @@ function special(type) {
           field.value = `${val.slice(0,3)}.${val.slice(4,6)}`;
         else if( len >= 0 ) 
           field.value = `${val.slice(0,3)}`;
+
+        setTimeout(() => {}, 100)
       }
     }
   }
