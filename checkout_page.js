@@ -135,7 +135,7 @@ function generate() {
         "method": "Pix",
         "payer_email": page.querySelector(".email").value,
         "payer_cpf": page.querySelector(".cpf").value,
-        "amount": 0.0
+        "amount": 12.0
       }
     })
   }).then(x => x.json()).then((res) => {
