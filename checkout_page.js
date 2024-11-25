@@ -148,7 +148,7 @@ function isValidCpf(cpf) {
 let gen = true;
 function generate() {
   const email = page.querySelector(".email").value;
-  if(! email.match(/\w+[@]{1}[a-Z0-9]+[.]{1}\w*/g) ) 
+  if(! email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) ) 
     return alert("Email invalido");
   
   const cpf = page.querySelector(".cpf").value;
