@@ -95,8 +95,8 @@ renderDynamic('Pix');
 
 /* functions */
 
-let pixInfo = '<div class="qr-code" style="display: none;"></div>';
-let literal = '';
+var pixInfo = '<div class="qr-code" style="display: none;"></div>';
+var literal = '';
 function renderDynamic(method) {
   const dyn = page.querySelector('.dynamic-content');
   switch(method) {
