@@ -6,5 +6,5 @@ const body = page.querySelector("body");
 const titleElement = page.createElement("title");
 const titleContent = `Payment not found`;
 const titleNode = page.createTextNode(titleContent);
-head.appendChield(titleElement);
+head.appendChild(titleElement);
 
