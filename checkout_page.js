@@ -166,6 +166,12 @@ function isValidCpf(cpf) {
 
 let gen = true;
 function generate() {
+  if( gen ) gen = !gen;
+  else {
+    navigator.clipboard.writeText(literal);
+    return;
+  };
+  
   const email = page.querySelector(".email").value;
   if(! email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) ) 
     return alert("Email invalido");
@@ -174,11 +180,6 @@ function generate() {
   if(! isValidCpf(cpf) ) 
     return alert("CPF invalido");
 
-  if( gen ) gen = !gen;
-  else {
-    navigator.clipboard.writeText(literal);
-    return;
-  };
 
   fetch(`${api}/payment/create`, {
     method: 'POST',
