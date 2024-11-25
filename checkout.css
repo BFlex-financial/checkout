@@ -136,9 +136,3 @@ button {
   outline: none;
   cursor: pointer;
 }
-
-div.special,
-div.special > * {
-  position: fixed;
-  top: -1000000000000000000000vh;
-}
