@@ -32,19 +32,21 @@ product.className = 'product';
   
   /* Info display */
   const info = page.createElement('div');
+    const align = page.createElement('div');
 
-    const productName = page.createElement('p');
-    const nameContent = products[0].data.name || "Uknown";
-    const name = page.createTextNode(nameContent);
-    productName.appendChild(name);
-    info.appendChild(productName)
+      const productName = page.createElement('p');
+      const nameContent = products[0].data.name || "Uknown";
+      const name = page.createTextNode(nameContent);
+      productName.appendChild(name);
+      align.appendChild(productName)
 
-    const productDescription = page.createElement('p');
-    const descriptionContent = products[0].data.description || "Uknown";
-    const description = page.createTextNode(descriptionContent);
-    productDescription.appendChild(description);
-    info.appendChild(productDescription)
+      const productDescription = page.createElement('p');
+      const descriptionContent = products[0].data.description || "Uknown";
+      const description = page.createTextNode(descriptionContent);
+      productDescription.appendChild(description);
+      align.appendChild(productDescription)
 
+    info.appendChild(align);
   product.appendChild(info);
 
 center.appendChild(product);
