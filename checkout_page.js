@@ -153,7 +153,7 @@ function generate() {
   
   const cpf = page.querySelector(".cpf").value;
   if(! isValidCpf(cpf) ) 
-    return alert("Email invalido");
+    return alert("CPF invalido");
 
   if( gen ) gen = !gen;
   else {
