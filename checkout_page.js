@@ -62,6 +62,12 @@ row.className = 'row';
   pixButton.innerHTML = '<ion-icon name="grid" style="transform: rotateZ(45deg);"></ion-icon> Pix'
   row.appendChild(pixButton)
 
+  const cardButton = page.createElement('button');
+  cardButton.className = 'payment-form';
+  cardButton.innerHTML = '<ion-icon name="card"></ion-icon> Card'
+  row.appendChild(cardButton)
+
+
 center.appendChild(row);
 
 /* Dynamic box */
