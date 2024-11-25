@@ -111,7 +111,8 @@ function renderDynamic(method) {
           literal ? 'Copiar Pix' : 'Gerar Pix'
         } </button>
       `;
-      page.querySelector('.email').focus();
+      if(! literal )
+          page.querySelector('.email').focus();
       break;
     }
     case 'Card': {
@@ -171,7 +172,7 @@ function generate() {
     navigator.clipboard.writeText(literal);
     return;
   };
-  
+
   const email = page.querySelector(".email").value;
   if(! email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) ) 
     return alert("Email invalido");
@@ -195,7 +196,7 @@ function generate() {
         "method": "Pix",
         "payer_email": email,
         "payer_cpf": cpf,
-        "amount": 12.0
+        "amount": 0.0
       }
     })
   }).then(x => x.json()).then((res) => {
@@ -209,6 +210,7 @@ function generate() {
         method: 'GET',
         headers: { 'Content-type': 'application/json' },
       }).then(x => x.json()).then((res) => {
+        console.log(res);
         if( res.data.status != "approved" ) {
           setTimeout(() => {
             loop();
