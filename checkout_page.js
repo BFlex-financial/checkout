@@ -105,7 +105,9 @@ function renderDynamic(method) {
         <input class="email" type="email" placeholder="Seu melhor Email">
         <input class="cpf"   type="number" placeholder="Seu CPF">
         ${pixInfo || ''}
-        <button onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> Gerar Pix </button>
+        <button class="qr_code_btn" onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> ${
+          literal ? 'Copiar Pix' : 'Gerar Pix'
+        } </button>
       `;
       break;
     }
@@ -119,7 +121,10 @@ function renderDynamic(method) {
 let gen = true;
 function generate() {
   if( gen ) gen = !gen;
-  else return;
+  else {
+    navigator.clipboard.writeText(literal);
+    return;
+  };
 
   fetch(`${api}/payment/create`, {
     method: 'POST',
