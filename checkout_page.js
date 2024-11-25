@@ -151,7 +151,7 @@ function special(type) {
   stop = false;
   switch(type) {
     case 'cpf': {
-      const cpf = page.querySelector('.special.cpf');
+      const cpf = page.querySelector('.special.cpf > input');
       const field = page.querySelector('.field.cpf');
 
       cpf.focus();
