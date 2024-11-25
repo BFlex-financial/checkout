@@ -61,7 +61,7 @@ row.className = 'row';
   pixButton.className = 'payment-form';
   pixButton.innerHTML = '<ion-icon name="grid" style="transform: rotateZ(45deg);"></ion-icon> Pix'
   row.appendChild(pixButton)
-  cardButton.onclick = () => renderDynamic('Pix');
+  pixButton.onclick = () => renderDynamic('Pix');
 
   const cardButton = page.createElement('button');
   cardButton.className = 'payment-form';
@@ -73,7 +73,7 @@ row.className = 'row';
   googleButton.className = 'payment-form';
   googleButton.innerHTML = '<ion-icon name="logo-google"></ion-icon> GPay'
   row.appendChild(googleButton)
-  cardButton.onclick = () => renderDynamic('GPay');
+  googleButton.onclick = () => renderDynamic('GPay');
 
 center.appendChild(row);
 
