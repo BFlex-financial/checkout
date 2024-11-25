@@ -104,7 +104,7 @@ function renderDynamic(method) {
       dyn.innerHTML = `
         <input class="email" type="email" placeholder="Seu melhor Email">
         <input class="cpf"   type="number" placeholder="Seu CPF">
-        ${pixInfo}
+        ${pixInfo || ''}
         <button onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> Gerar Pix </button>
       `;
       break;
@@ -141,5 +141,6 @@ function generate() {
   }).then(x => x.json()).then((res) => {
     pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${res.data.qr_code.base64}"></div>`;
     literal = res.data.qr_code.literal;
+    renderDynamic('Pix');
   })
 }
