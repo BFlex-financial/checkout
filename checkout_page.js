@@ -1,10 +1,11 @@
+const api = "http://127.0.0.1:8080"
 const page = document;
 const head = page.querySelector('head');
 const body = page.querySelector('body');
 
 /* titulo */
 const titleElement = page.createElement('title');
-const titleContent = `BFlex payment - Checkout - ${products[0].data.name}`;
+const titleContent = `BFlex payment - Checkout - ${checkout.name}`;
 const titleNode = page.createTextNode(titleContent);
 titleElement.appendChild(titleNode);
 head.appendChild(titleElement);
@@ -27,7 +28,7 @@ product.className = 'product';
   /* Product image */
   const thumbnail = page.createElement('img');
   thumbnail.className = 'thumbnail';
-  thumbnail.src = products[0].data.thumbnail;
+  thumbnail.src = checkout.thumbnail;
   product.appendChild(thumbnail);
   
   /* Info display */
@@ -35,14 +36,14 @@ product.className = 'product';
     const align = page.createElement('div');
 
       const productName = page.createElement('p');
-      const nameContent = products[0].data.name || "Uknown";
+      const nameContent = checkout.name || "Uknown";
       const name = page.createTextNode(nameContent);
       productName.appendChild(name);
       productName.className = 'name'
       align.appendChild(productName)
 
       const productDescription = page.createElement('p');
-      const descriptionContent = products[0].data.description || "Uknown";
+      const descriptionContent = checkout.description || "Uknown";
       const description = page.createTextNode(descriptionContent);
       productDescription.appendChild(description);
       productDescription.className = 'description'
@@ -101,10 +102,9 @@ function renderDynamic(method) {
       dyn.innerHTML = `
         <input type="email" placeholder="Seu melhor Email">
         <input type="number" placeholder="Seu CPF">
-        <div class="qr-code">
-          <img class="qr-code-img" style="display: none;">
+        <div class="qr-code" style="display: none;">
         </div>
-        <button> <ion-icon name="qr-code-outline"></ion-icon> Gerar QRCode </button>
+        <button onclick="generate()"> <ion-icon name="qr-code-outline"></ion-icon> Gerar Pix </button>
       `;
       break;
     }
@@ -113,4 +113,17 @@ function renderDynamic(method) {
       break;
     }
   }
+}
+
+let gen = true;
+function generate() {
+  if( gen ) gen = !gen;
+  else return;
+
+  fetch(`${api}/payments/create`, {
+    headers: {
+      'Content-type': 'application/json',
+
+    }
+  })
 }

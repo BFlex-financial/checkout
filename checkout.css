@@ -123,6 +123,7 @@ p {
   color: #fff;
   border: none;
   background: #4444ff;
+  border-radius: 3px;
 }
 
 button {
