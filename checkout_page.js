@@ -65,4 +65,4 @@ buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
 buyButton.className = 'buy-button';
 center.appendChild(dynamicContent);
 center.appendChild(buyButton);
-body.appendChild('center');
+body.appendChild(center);
