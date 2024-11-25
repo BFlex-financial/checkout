@@ -61,20 +61,56 @@ row.className = 'row';
   pixButton.className = 'payment-form';
   pixButton.innerHTML = '<ion-icon name="grid" style="transform: rotateZ(45deg);"></ion-icon> Pix'
   row.appendChild(pixButton)
+  cardButton.onclick = () => renderDynamic('Pix');
 
   const cardButton = page.createElement('button');
   cardButton.className = 'payment-form';
   cardButton.innerHTML = '<ion-icon name="card"></ion-icon> Card'
   row.appendChild(cardButton)
+  cardButton.onclick = () => renderDynamic('Card');
 
+  const googleButton = page.createElement('button');
+  googleButton.className = 'payment-form';
+  googleButton.innerHTML = '<ion-icon name="logo-google"></ion-icon> GPay'
+  row.appendChild(googleButton)
+  cardButton.onclick = () => renderDynamic('GPay');
 
 center.appendChild(row);
 
 /* Dynamic box */
 const dynamicContent = page.createElement('div');
+dynamicContent.className = 'dynamic-content'
+center.appendChild(dynamicContent);
+
+/* Buy button */ 
 const buyButton = page.createElement('button');
 buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
 buyButton.className = 'buy-button';
-center.appendChild(dynamicContent);
 center.appendChild(buyButton);
+
 body.appendChild(center);
+
+renderDynamic('Pix');
+
+/* functions */
+
+function renderDynamic(method) {
+  const dyn = page.querySelector('.dynamic-content');
+  switch(method) {
+    case 'Pix': {
+      dyn.innerHTML = `
+        <input type="email" placeholder="Seu melhor Email">
+        <input type="number" placeholder="Seu CPF">
+        <div class="qr-code">
+          <img class="qr-code-img" style="display: none;">
+        </div>
+        <button> <ion-icon name="qr-code-outline"></ion-icon> Gerar QRCode </button>
+      `;
+      break;
+    }
+    default: {
+      dyn.innerHTML = '';
+      break;
+    }
+  }
+}
