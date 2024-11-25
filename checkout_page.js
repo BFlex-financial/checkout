@@ -62,7 +62,7 @@ row.className = 'row';
   pixButton.innerHTML = '<ion-icon name="grid" style="transform: rotateZ(45deg);"></ion-icon> Pix'
   row.appendChild(pixButton)
 
-center.appendChild(pixButton);
+center.appendChild(row);
 
 /* Dynamic box */
 const dynamicContent = page.createElement('div');
