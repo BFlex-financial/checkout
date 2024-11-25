@@ -182,7 +182,7 @@ function createSpecial(field) {
   div.className = 'special';
   const nField = page.createElement('input');
   div.classList.add('special');
-  div.classList.add('field');
+  div.classList.add(field);
   div.appendChild(nField); 
   body.appendChild(div);
 } 
