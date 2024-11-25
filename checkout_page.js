@@ -162,9 +162,6 @@ function special(type) {
         const formattedValue = formatCPF(rawValue);
         cpf.value = rawValue.slice(0, 11); // Limita ao tamanho do CPF
         field.value = formattedValue;
-
-        const newPosition = calculateCursorPosition(cursorPosition, cpf.value);
-        cpf.setSelectionRange(newPosition, newPosition);
       });
       
       break;
@@ -172,29 +169,23 @@ function special(type) {
   }
 }
 
-function calculateCursorPosition(oldPosition, formattedValue) {
-  // Calcula a nova posição do cursor ignorando caracteres extras (ponto e hífen)
-  let offset = 0;
-  for (let i = 0; i < oldPosition; i++) {
-    if (formattedValue[i] === '.' || formattedValue[i] === '-') {
-      offset++;
-    }
-  }
-  return oldPosition + offset;
-}
-
 function formatCPF(value) {
+  // Formata o CPF conforme o número de dígitos
+  const part1 = value.slice(0, 3);
+  const part2 = value.slice(3, 6);
+  const part3 = value.slice(6, 9);
+  const part4 = value.slice(9, 11);
+
   if (value.length > 9) {
-    return `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6, 9)}-${value.slice(9, 11)}`;
+    return `${part1}.${part2}.${part3}-${part4}`;
   } else if (value.length > 6) {
-    return `${value.slice(0, 3)}.${value.slice(3, 6)}.${value.slice(6)}`;
+    return `${part1}.${part2}.${part3}`;
   } else if (value.length > 3) {
-    return `${value.slice(0, 3)}.${value.slice(3)}`;
+    return `${part1}.${part2}`;
   } else {
-    return value;
+    return part1;
   }
 }
-
 
 function createSpecial(field) {
   const div = page.createElement('div');
