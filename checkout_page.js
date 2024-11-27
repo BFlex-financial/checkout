@@ -180,7 +180,7 @@ function generate() {
       console.log(res);
       if( res.data.status != "approved" ) {
         setTimeout(() => {
-          loop();
+          loop(payment_id);
         }, 5000)
       }
       else {
