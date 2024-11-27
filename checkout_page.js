@@ -1,3 +1,5 @@
+let gen = true;
+
 const api = "http://127.0.0.1:8080"
 const page = document;
 const head = page.querySelector('head');
@@ -168,7 +170,6 @@ function isValidCpf(cpf) {
   return cpf === base + digito1.toString() + digito2.toString();
 }
 
-let gen = true;
 function generate() {
 
   function loop(payment_id) {
