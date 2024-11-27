@@ -92,6 +92,9 @@ center.appendChild(buyButton);
 body.appendChild(center);
 
 renderDynamic('Pix');
+if( pix.literal ) {
+  generate();
+}
 
 /* functions */
 
@@ -167,59 +170,72 @@ function isValidCpf(cpf) {
 
 let gen = true;
 function generate() {
+
+  function loop(payment_id) {
+    fetch(`${api}/payment/get/checkout/${checkout.id}/${payment_id}`, {
+      method: 'GET',
+      headers: { 'Content-type': 'application/json' },
+    }).then(x => x.json()).then((res) => {
+      console.log(res);
+      if( res.data.status != "approved" ) {
+        setTimeout(() => {
+          loop();
+        }, 5000)
+      }
+      else {
+        alert("Pagamento aprovado!");
+      }
+    })
+  };
+
   if( gen ) gen = !gen;
   else {
     navigator.clipboard.writeText(literal);
     return;
   };
 
-  const email = page.querySelector(".email").value;
-  if(! email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) ) 
-    return alert("Email invalido");
-  
-  const cpf = page.querySelector(".cpf").value;
-  if(! isValidCpf(cpf) ) 
-    return alert("CPF invalido");
+  if( pix.literal )
+    {
+      pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${pix.base64}"></div>`;
+      literal = pix.literal;
+      renderDynamic('Pix');
+      page.querySelector('.row').style = 'display: none;';
+      loop(pix.id);
+    }
+  else {
 
+    const email = page.querySelector(".email").value;
+    if(! email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/) ) 
+      return alert("Email invalido");
+    
+    const cpf = page.querySelector(".cpf").value;
+    if(! isValidCpf(cpf) ) 
+      return alert("CPF invalido");
 
-  fetch(`${api}/payment/create`, {
-    method: 'POST',
-    headers: {
-      'Content-type': 'application/json',
-      'Authorization-key': 'Bearer NON_KEY'
-    },
-    body: JSON.stringify({
-      "amount": 0.21,
-      "method": "Checkout",
-      "checkout_id": checkout.id,
-      "payment_type": {
-        "method": "Pix",
-        "payer_email": email,
-        "payer_cpf": cpf,
-        "amount": 0.0
-      }
-    })
-  }).then(x => x.json()).then((res) => {
-    pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${res.data.qr_code.base64}"></div>`;
-    literal = res.data.qr_code.literal;
-    renderDynamic('Pix');
-    page.querySelector('.row').style = 'display: none;';
-
-    (function loop() {
-      fetch(`${api}/payment/get/checkout/${checkout.id}/${res.data.payment_id}`, {
-        method: 'GET',
-        headers: { 'Content-type': 'application/json' },
-      }).then(x => x.json()).then((res) => {
-        console.log(res);
-        if( res.data.status != "approved" ) {
-          setTimeout(() => {
-            loop();
-          }, 5000)
-        }
-        else {
-          alert("Pagamento aprovado!");
+    fetch(`${api}/payment/create`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization-key': 'Bearer NON_KEY'
+      },
+      body: JSON.stringify({
+        "amount": 0.21,
+        "method": "Checkout",
+        "checkout_id": checkout.id,
+        "payment_type": {
+          "method": "Pix",
+          "payer_email": email,
+          "payer_cpf": cpf,
+          "amount": 0.0
         }
       })
-    })();
-  })
+    }).then(x => x.json()).then((res) => {
+      pixInfo = `<div class="qr-code"><img src="data:image/png;base64,${res.data.qr_code.base64}"></div>`;
+      literal = res.data.qr_code.literal;
+      renderDynamic('Pix');
+      page.querySelector('.row').style = 'display: none;';
+      loop(res.data.payment_id);
+    })
+
+  }
 }
