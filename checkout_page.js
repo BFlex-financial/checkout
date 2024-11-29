@@ -95,8 +95,6 @@ center.appendChild(dynamicContent);
 //   amount: Number
 // }
 
-const pix = new Object();
-
 const buyButton = page.createElement('button');
 buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
 buyButton.className = 'buy-button';
