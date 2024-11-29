@@ -1,6 +1,7 @@
 let gen = true;
 
-const api = "http://127.0.0.1:8080"
+// const api = "http://127.0.0.1:8080"
+const api = "https://0477-179-108-204-191.ngrok-free.app";
 const page = document;
 const head = page.querySelector('head');
 const body = page.querySelector('body');
@@ -20,7 +21,7 @@ head.appendChild(faviconElement);
 
 /* div */
 body.style = "width: 100vw; min-height: 100vh; display: flex; align-items: center; justify-content: center;";
-const center = page.createElement('div');
+const center = page.createElement('section');
 center.className = 'box';
   
 /* Product info */
@@ -86,6 +87,13 @@ dynamicContent.className = 'dynamic-content'
 center.appendChild(dynamicContent);
 
 /* Buy button */ 
+const pix = {
+  literal: String,
+  base64: String,
+  id: String,
+  amount: Number
+}
+
 const buyButton = page.createElement('button');
 buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
 buyButton.className = 'buy-button';
