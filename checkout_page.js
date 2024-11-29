@@ -87,12 +87,15 @@ dynamicContent.className = 'dynamic-content'
 center.appendChild(dynamicContent);
 
 /* Buy button */ 
-const pix = {
-  literal: String,
-  base64: String,
-  id: String,
-  amount: Number
-}
+
+// const pix = {
+//   literal: String,
+//   base64: String,
+//   id: String,
+//   amount: Number
+// }
+
+const pix = new Object();
 
 const buyButton = page.createElement('button');
 buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
