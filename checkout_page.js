@@ -173,7 +173,7 @@ function isValidCpf(cpf) {
 function generate() {
 
   function loop(payment_id) {
-    fetch(`${api}/payment/get/checkout/${checkout.id}/${payment_id}`, {
+    fetch(`${api}/api/payment/get/checkout/${checkout.id}/${payment_id}`, {
       method: 'GET',
       headers: { 'Content-type': 'application/json' },
     }).then(x => x.json()).then((res) => {
@@ -213,7 +213,7 @@ function generate() {
     if(! isValidCpf(cpf) ) 
       return alert("CPF invalido");
 
-    fetch(`${api}/payment/create`, {
+    fetch(`${api}/api/payment/create`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
