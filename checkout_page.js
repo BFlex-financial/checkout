@@ -21,7 +21,7 @@ head.appendChild(faviconElement);
 
 /* div */
 body.style = "width: 100vw; min-height: 100vh; display: flex; align-items: center; justify-content: center;";
-const center = page.createElement('section');
+const center = page.createElement('div');
 center.className = 'box';
   
 /* Product info */
@@ -87,13 +87,6 @@ dynamicContent.className = 'dynamic-content'
 center.appendChild(dynamicContent);
 
 /* Buy button */ 
-const pix = {
-  literal: String,
-  base64: String,
-  id: String,
-  amount: Number
-}
-
 const buyButton = page.createElement('button');
 buyButton.innerHTML = '<ion-icon name="cart"></ion-icon> Comprar agora'
 buyButton.className = 'buy-button';
@@ -181,7 +174,7 @@ function isValidCpf(cpf) {
 function generate() {
 
   function loop(payment_id) {
-    fetch(`${api}/payment/get/checkout/${checkout.id}/${payment_id}`, {
+    fetch(`${api}/api/payment/get/checkout/${checkout.id}/${payment_id}`, {
       method: 'GET',
       headers: { 'Content-type': 'application/json' },
     }).then(x => x.json()).then((res) => {
@@ -221,7 +214,7 @@ function generate() {
     if(! isValidCpf(cpf) ) 
       return alert("CPF invalido");
 
-    fetch(`${api}/payment/create`, {
+    fetch(`${api}/api/payment/create`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
