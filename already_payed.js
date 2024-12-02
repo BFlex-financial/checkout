@@ -4,7 +4,7 @@ const body = page.querySelector('body');
 
 /* titulo */
 const titleElement = page.createElement('title');
-const titleContent = `Already payed`;
+const titleContent = `Already paid`;
 const titleNode = page.createTextNode(titleContent);
 titleElement.appendChild(titleNode);
 head.appendChild(titleElement);
