@@ -19,7 +19,7 @@ head.appendChild(faviconElement);
 body.style = "width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;";
 const h1 = page.createElement('h1');
 h1.style = "font-family: sans-serif; font-size: 32px; font-weight: bold;";
-const h1Content = `Already payed ✅`;
+const h1Content = `Already paid ✅`;
 const h1Node = page.createTextNode(titleContent);
 h1.appendChild(h1Node);
 body.appendChild(h1);
