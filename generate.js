@@ -1,4 +1,4 @@
-fetch("https://0477-179-108-204-191.ngrok-free.app/checkout/create", {
+fetch("10.242.167.156/checkout/create", {
   headers: {
     'Content-type': 'application/json',
     "Authorization-key": "Bearer admin"
