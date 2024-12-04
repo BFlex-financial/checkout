@@ -1,7 +1,7 @@
 let gen = true;
 
 // const api = "http://127.0.0.1:8080"
-const api = "https://f176-179-108-204-191.ngrok-free.app/";
+const api = "https://1610-179-108-204-191.ngrok-free.app/";
 const page = document;
 const head = page.querySelector('head');
 const body = page.querySelector('body');

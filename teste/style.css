@@ -1,0 +1,179 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap');
+
+@layer default_style {
+    * {
+        margin: 0;
+        padding: 0;
+        outline: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        color-scheme: light dark;
+    }
+    
+    body {
+        overflow-x: hidden;
+    }
+}
+
+@layer fonts {
+    :root {
+        --Noto_Sans_JP: 'Noto Sans JP';
+        --Lato: Lato;
+        --Inter: Inter;
+    }
+}
+
+@layer main {
+    section#main {
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+    }
+    
+    section#main aside.info,
+    section#main aside.pay {
+        min-height: 100vh;
+        width: 50%;
+    }
+}
+
+@layer Purchase_Details {
+
+    @layer value_information {
+
+        @layer colors {
+
+            /* Use the form:  --variable: light-color, dark-color;  to edit */
+
+            :root {
+                --p_info: black, rgb(230, 228, 228);
+                --valueh1_info: black, rgb(230, 228, 228);
+                --p_info_shadow: black, rgb(230, 228, 228);
+                --valueh1_info_shadow: rgba(0, 0, 0, 0.193);
+            }
+        }
+
+        @layer properties {
+            section#main aside.info {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            
+            section#main aside.info section.cont {
+                height: 80%;
+                width: 60%;
+            }
+            
+            section#main aside.info section.cont aside.valueinfo {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5vmin;
+            }
+    
+            section#main aside.info section.cont aside.valueinfo p#info {
+                font-size: .9rem;
+                line-height: 1rem;
+                text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.099);
+                color: light-dark(var(--p_info));
+                font-family: var(--Noto_Sans_JP);
+                font-weight: 700;
+            }
+    
+            section#main aside.info section.cont aside.valueinfo h1 {
+                font-size: 2rem;
+                display: flex;
+                gap: .5vmin;
+                line-height: 2rem;
+                text-shadow: 0px 0px 5px var(--valueh1_info_shadow);
+                font-family: var(--Lato);
+                color: light-dark(var(--valueh1_info));
+            }
+        }
+        
+    }
+
+    @layer products {
+
+        @layer colors {}
+
+        @layer properties {
+
+            section#main aside.products {
+                margin-top: 5vmin;
+                width: 60%;
+            }
+
+            section#main aside.products div#product {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: auto;
+                overflow: hidden;
+                height: 8vmin;
+            }
+
+            section#main aside.products div#product section.details {
+                display: flex;
+                gap: 1vmin;
+            }
+
+            section#main aside.products div#product section.details img {
+                width: 5vmin;
+                height: 5vmin;
+                border-radius: 5px;
+            }
+
+            section#main aside.products div#product section.details div.details p.name {
+                font-family: var(--Inter);
+                letter-spacing: .5px;
+                font-size: 1em;
+            }
+
+            section#main aside.products div#product section.details div.details p.description {
+                font-family: var(--Inter);
+                margin-top: .1vmin;
+                letter-spacing: .5px;
+                font-size: .75em;
+            }
+
+            section#main aside.products div#product section.details button.quantity {
+                cursor: pointer;
+                margin-top: .8vmin;
+                padding: 0 5px;
+                display: flex;
+                gap: .5vmin;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden;
+                height: 2.25vmin;
+                border-radius: 5px;
+                font-family: var(--Inter);
+                font-size: .8em;
+                border: none;
+                background-color: rgba(128, 128, 128, 0.245);
+            }
+
+            section#main aside.products div#product section.details button.quantity svg {
+                position: relative;
+                display: inline;
+                height: 1.5em;
+                width: auto;
+            }
+
+            section#main aside.products div#product div.value {
+                display: inline;
+            }
+
+            section#main aside.products div#product div.value p {
+                display: flex;
+                gap: .4vmin;
+                font-family: var(--Lato);
+            }
+        }
+    }
+}
