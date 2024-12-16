@@ -29,9 +29,9 @@ const coupons = {
 let appliedCoupon = null;
 let currentCoupon = null;
 let couponMessageIs = false;
-let applyCouponBtnValid = true;
 let appliedCloseCouponBtnValid = true;
 let applyCouponToggleValid = false;
+let applyCouponInputBtnValid = true;
 let couponInputValue = String;
 
 document.addEventListener('mousedown', (event) => {
