@@ -300,12 +300,12 @@
                     padding: 1vmin 1vmin 1vmin 0;
                     font-family: var(--Inter);
                     font-size: 1.4vmin;
-                    opacity: 1;
+                    opacity: 0;
                     transition: .4s cubic-bezier(0.215, 1, 1, 1);
                 }
 
-                section#main aside.coupon div.applying button.applyCouponBtn.disabled {
-                    opacity: 0;
+                section#main aside.coupon div.applying button.applyCouponBtn.enabled {
+                    opacity: 1;
                 }
 
                 section#main aside.coupon div.applying p.message {
