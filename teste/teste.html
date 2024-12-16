@@ -1,53 +1,428 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width='device-width', initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Checkout</title>
 </head>
+
 <body>
     <section id="main">
         <aside class="info">
             <section class="cont">
                 <aside class="valueinfo">
                     <p id="info">Valor Total</p>
-                    <h1><span id="coin">R&#36;</span><span id="value">129.00</span></h1>
+                    <h1 id="totalValue"><span id="coin">R&#36;</span><span class="value"><span class="int">0</span><span
+                                class="decimal">.00</span></span></h1>
                 </aside>
 
                 <aside class="products">
                     <div id="product">
                         <section class="details">
-                            <img src="https://comidinhasdochef.com/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2020/04/Miojo-no-Microondas-Simples.jpg.webp" alt="">
-                            <div>
+                            <img src="https://comidinhasdochef.com/wp-content/webp-express/webp-images/doc-root/wp-content/uploads/2020/04/Miojo-no-Microondas-Simples.jpg.webp"
+                                alt="">
+                            <div class="container">
                                 <span class="value">
                                     <div class="details">
                                         <p class="name">Miojo</p>
                                         <p class="description">Nissin</p>
                                     </div>
-                                    <button class="quantity">Quantidade 1 <svg
-                                        
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                      >
-                                        <path
-                                          d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
-                                          fill="currentColor"
-                                        />
-                                      </svg></button>
+                                    <button class="quantity">Quantidade <span class="quantityNumber">1</span> <svg
+                                            viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
+                                                fill="currentColor" />
+                                        </svg></button>
                                 </span>
                             </div>
                         </section>
 
                         <div class="value">
-                            <p class="value"><span id="coin">R&#36;</span><span id="value">129.00</span></p>
+                            <p class="value"><span id="coin">R&#36;</span><span id="value">10.00</span></p>
+                            <p class="unity">Unidade<span class="container"><span id="coin">R&#36;</span><span
+                                        id="value">10.00</span></span></p>
                         </div>
                     </div>
+
+                    <div id="product">
+                        <section class="details">
+                            <img src="https://drogariasp.vteximg.com.br/arquivos/ids/435164-1000-1000/641693---energetico-monster-energy-473ml-spal.jpg?v=637496168469870000"
+                                alt="">
+                            <div class="container">
+                                <span class="value">
+                                    <div class="details">
+                                        <p class="name">Monster</p>
+                                        <p class="description">Monster</p>
+                                    </div>
+                                    <button class="quantity">Quantidade <span class="quantityNumber">2</span> <svg
+                                            viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.34317 7.75732L4.92896 9.17154L12 16.2426L19.0711 9.17157L17.6569 7.75735L12 13.4142L6.34317 7.75732Z"
+                                                fill="currentColor" />
+                                        </svg></button>
+                                </span>
+                            </div>
+                        </section>
+
+                        <div class="value">
+                            <p class="value"><span id="coin">R&#36;</span><span id="value">16.50</span></p>
+                            <p class="unity">Unidade<span class="container"><span id="coin">R&#36;</span><span
+                                        id="value">8.00</span></span></p>
+                        </div>
+                    </div>
+                </aside>
+
+                <aside class="calculation">
+                    <aside class="coupon">
+                        <div class="applying removable">
+                            <button class="applyCouponBtn">Aplicar cupom</button>
+                            <div class="container removable">
+                                <input placeholder="Aplicar cupom" autocomplete="off" maxlength="16" type="text"
+                                    id="applyCouponInput" class="removable">
+                                <div class="apply removable">
+                                    <button class="applyBtn removable">Apply</button>
+                                </div>
+                            </div>
+                            <p class="message removable">Cupom inválido</p>
+                        </div>
+                        <div class="applied">
+                            <div class="container">
+                                <section class="coupon">
+                                    <div class="cont">
+                                        <aside class="symbol">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="mdi-tag"
+                                                width="24" height="24" viewBox="0 0 24 24">
+                                                <path
+                                                    d="M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z" />
+                                            </svg>
+                                        </aside>
+                                        <aside class="name">
+                                            <p class="appliedCouponName"></p>
+                                        </aside>
+                                    </div>
+                                    <aside class="close">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z"
+                                                fill="currentColor" />
+                                        </svg>
+                                    </aside>
+                                </section>
+                                <p class="percentage"><span class="cont"><span class="value"><span
+                                                class="int">0</span><span class="decimal">.00</span></span>&#x25;</span>
+                                    off
+                                </p>
+                            </div>
+                            <aside class="valueOfDiscount">
+                                <p class="value">-<span id="coin">R&#36;</span><span class="value"><span
+                                            class="int">0</span><span class="decimal">.00</span></span></p>
+                            </aside>
+                        </div>
+                    </aside>
                 </aside>
             </section>
         </aside>
         <aside class="pay"></aside>
+
     </section>
+
+    <section class="quantity">
+        <menu id="quantity">
+            <section class="container">
+                <aside class="desc">
+                    <aside class="cont">
+                        <div>
+                            <img src="https://drogariasp.vteximg.com.br/arquivos/ids/435164-1000-1000/641693---energetico-monster-energy-473ml-spal.jpg?v=637496168469870000"
+                                alt="">
+                            <div class="container">
+                                <p>Atualizar item</p>
+                                <p class="name">Monster</p>
+                            </div>
+                        </div>
+
+                        <div class="close">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                    </aside>
+                </aside>
+
+                <aside class="define">
+                    <section class="numbers">
+                        <button class="less">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                        <input type="number" id="quantityOfItems">
+                        <button class="more">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </section>
+
+                    <section class="buttons">
+                        <button class="update">Atualizar</button>
+                        <button class="remove">Remover</button>
+                    </section>
+                </aside>
+            </section>
+        </menu>
+    </section>
+
+    <script>
+        const lastproduct = document.querySelector('aside.products').lastElementChild
+        const valueElements = document.querySelectorAll('aside.products div#product div.value p.value span#value');
+        const totalValueContainer = document.querySelector('h1#totalValue span.value')
+        let values = Array.from(valueElements).map(el => parseFloat(el.textContent));
+        let totalValue = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateTotalValue(false)
+        })
+
+        const applyCouponBtn = document.querySelector('button.applyCouponBtn');
+        const applyBtn = document.querySelector('button.applyBtn');
+        const couponInputCont = document.querySelector('aside.coupon div.container');
+        const couponInput = document.querySelector('aside.coupon div.container input#applyCouponInput');
+        const couponAppliedName = document.querySelector('aside.coupon div.applied section.coupon aside.name p.appliedCouponName');
+        const couponAppliedPercentage = document.querySelector('aside.coupon div.applied div.container p.percentage span.value');
+        const couponAppliedAmount = document.querySelector('aside.coupon div.applied aside.valueOfDiscount p.value span.value');
+        const couponCloseApplied = document.querySelector('aside.coupon div.applied section.coupon aside.close');
+        const applying = document.querySelector('aside.coupon div.applying');
+        const applied = document.querySelector('aside.coupon div.applied');
+        const couponMessage = document.querySelector('aside.coupon p.message');
+        const coupons = {
+            "name": "TESTE20",
+            "percent": '20',
+            "amount": 5.3
+        }
+        let appliedCoupon;
+        let couponMessageIs = false;
+        let applyCouponBtnValid = true;
+        let appliedCloseCouponBtnValid = true;
+        let applyCouponInputBtnValid = true;
+        let applyCouponToggleValid = false;
+        let couponInputValue = String;
+
+        // document.addEventListener('click', (event) => {
+        //     const clickedElement = event.target;
+        //     if (clickedElement.classList.contains('removable')) {
+        //         return
+        //     } else if (applyCouponToggleValid) {
+        //         toggleCouponInputs(applyCouponBtnValid)
+        //         applyCouponBtnValid = true;
+        //     }
+        // })
+
+        couponInput.addEventListener('input', async () => {
+            couponInput.value = couponInput.value.toUpperCase()
+            if (couponMessageIs) {
+                couponMessage.classList.remove('invalid')
+            }
+
+            if (couponInput.value == '') {
+                applyBtn.classList.remove('active')
+                await new Promise(resolve => setTimeout(resolve, 400));
+                applyBtn.style.display = 'none';
+                return
+            }
+            applyBtn.style.display = 'block';
+            await new Promise(resolve => setTimeout(resolve, 100));
+            applyBtn.classList.add('active')
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    apply();
+                }
+            });
+
+        })
+
+        applyCouponBtn.addEventListener('click', () => {
+            toggleCouponInputs(applyCouponBtnValid)
+        })
+
+        applyBtn.addEventListener('click', async () => {
+            if (couponInput.value == '') {
+                return
+            }
+            apply()
+        })
+
+        async function apply() {
+            if (!applyCouponInputBtnValid) {
+                return
+            }
+            applyCouponInputBtnValid = false;
+            let verify = await verifyCouponInput()
+
+            if (!verify) {
+                couponMessage.classList.add('invalid')
+                couponMessageIs = true;
+                applyCouponInputBtnValid = true;
+                return
+            }
+
+            appliedCloseCouponBtnValid = true;
+            let percent = coupons.percent;
+            let amount = coupons.amount;
+            couponMessage.classList.remove('invalid')
+            let value = await calculateTotalValue(true).toString();
+            couponAppliedName.textContent = couponInputValue;
+            appliedCoupon = couponInput.value;
+            couponInput.value = '';
+            applying.classList.add('remove')
+            applied.classList.add('first')
+            await new Promise(resolve => setTimeout(resolve, 500));
+            applied.classList.add('show')
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            animateNumbers(couponAppliedPercentage, percent, false, false)
+            animateNumbers(couponAppliedAmount, amount, false, false)
+            animateNumbers(totalValueContainer, value, true, false)
+        }
+
+        couponCloseApplied.addEventListener('click', async () => {
+            if (!appliedCloseCouponBtnValid) {
+                return
+            }
+
+            appliedCoupon = couponInput.value;
+
+            applied.classList.remove('show')
+            await new Promise(resolve => setTimeout(resolve, 600));
+            applied.classList.remove('first')
+            await new Promise(resolve => setTimeout(resolve, 500));
+            applying.classList.remove('remove')
+            couponAppliedName.textContent = '';
+            applyCouponInput.focus()
+
+            appliedCloseCouponBtnValid = false;
+            applyCouponInputBtnValid = true;
+        })
+
+        function verifyCouponInput() {
+            couponInputValue = couponInput.value;
+            return coupons.name.includes(couponInputValue);
+        }
+
+
+        function toggleCouponInputs(btnValid) {
+            if (!btnValid && applyCouponToggleValid == true) {
+                couponInputCont.style.display = 'inline';
+
+                setTimeout(() => {
+                    applyCouponBtn.style.display = 'none';
+                }, 500)
+            } else if (btnValid && !applyCouponToggleValid) {
+                couponInputCont.style.display = 'inline';
+                setTimeout(() => {
+                    applyCouponBtn.style.display = 'none';
+                }, 500)
+            }
+
+            applyCouponToggleValid = false;
+            applyCouponBtnValid = false;
+            applyCouponBtn.classList.toggle('disabled')
+
+            couponInput.value = '';
+            couponMessage.classList.remove('invalid')
+
+
+            setTimeout(() => {
+                couponInputCont.classList.toggle('active');
+                setTimeout(() => {
+                    applyCouponInput.focus()
+                    setTimeout(() => {
+                        applyCouponToggleValid = true;
+                    }, 200)
+                }, 600)
+            }, 400)
+
+        }
+
+        function calculateTotalValue(coupon) {
+            if (!coupon) {
+
+                values.forEach(value => {
+                    totalValue += value
+                });
+
+                animateNumbers(totalValueContainer, totalValue, true, true)
+            }
+
+            return totalValue - parseFloat(coupons.amount)
+        }
+
+        async function animateNumbers(elem, val, pad, skip) {
+            let mainElem = elem;
+            let value = val.toString();
+            let isDecimal = true;
+
+            if (value.includes('.') == false) {
+                isDecimal = false;
+                value = value.concat('.00')
+            }
+
+            let int = elem.firstElementChild;
+            let decimal = elem.lastElementChild;
+            let intValue = parseInt(value);
+            let actualIntValue = parseInt(int.textContent);
+            let floatValue = parseFloat(Array.from(value).splice(value.indexOf('.') + 1).join('').padEnd(2, '0'));
+            let actualFloatValue = parseFloat(Array.from(decimal.innerHTML).splice(1, 3).join(''));
+            let makePad = true;
+
+            if (skip) {
+                int.textContent = intValue;
+                decimal.textContent = `.${floatValue}`;
+                return;
+            }
+
+            if (!pad && floatValue == 0) {
+                makePad = false
+                decimal.textContent = '';
+            }
+
+            while (actualIntValue != intValue || actualFloatValue != floatValue) {
+                await new Promise(resolve => setTimeout(resolve, 30));
+                if (actualIntValue != intValue) {
+                    if (actualIntValue < intValue) {
+                        actualIntValue++
+                        int.textContent = actualIntValue;
+                    } else {
+                        actualIntValue--
+                        int.textContent = actualIntValue;
+                    }
+                }
+
+                if (actualFloatValue != floatValue && makePad) {
+                    if (actualFloatValue < floatValue) {
+                        actualFloatValue++
+                        decimal.textContent = `.${actualFloatValue.toString().padEnd(2, '0')}`;
+                    } else {
+                        actualFloatValue--
+                        decimal.textContent = `.${actualFloatValue.toString().padEnd(2, '0')}`;
+                    }
+                }
+
+            }
+
+
+        }
+    </script>
 </body>
+
 </html>
