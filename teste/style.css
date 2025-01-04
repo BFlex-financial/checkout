@@ -17,7 +17,7 @@
     body {
         position: relative;
         overflow: hidden;
-        background-color: light-dark(white, rgb(24, 23, 23));
+        background-color: light-dark(#ededed, rgb(24, 23, 23));
     }
 }
 
@@ -687,3 +687,5 @@
 
     }
 }
+
+@layer Payment_Details {}
