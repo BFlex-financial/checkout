@@ -17,7 +17,7 @@
     body {
         position: relative;
         overflow: hidden;
-        background-color: light-dark(#ededed, rgb(24, 23, 23));
+        background-color: light-dark(#F8F8F8, rgb(24, 23, 23));
     }
 }
 
@@ -255,9 +255,9 @@
 
             @layer applied {
                 :root {
-                    --coupon-applied-show-bg-color: black, #36353594;
-                    --coupon-applied-symbol-svg-fill-color: black, whitesmoke;
-                    --coupon-applied-close-svg-color: black, whitesmoke;
+                    --coupon-applied-show-bg-color: #eaeaea, #353434;
+                    --coupon-applied-symbol-svg-fill-color: rgb(45, 45, 45), whitesmoke;
+                    --coupon-applied-close-svg-color: rgb(45, 45, 45), whitesmoke;
                     --coupon-applied-close-svg-hover-color: black, rgb(209, 113, 113);
                     --coupon-applied-percentage-color: black, rgb(187, 186, 186);
                     --coupon-applied-percentage-number-color: black, rgb(211, 210, 210);
@@ -688,4 +688,138 @@
     }
 }
 
-@layer Payment_Details {}
+@layer Payment_Details {
+    @layer colors {
+        @layer googlePay {
+            :root {
+                --googlepay_button_color: whitesmoke, whitesmoke;
+                --aside_pay_bg_color: rgb(249, 249, 249), #1d1d1d;
+                --googlepay_button_bg_color: rgb(73, 65, 65), rgba(128, 128, 128, 0.245);
+                --googlepay_button_hover_bg_color: rgb(51, 42, 42), rgba(70, 69, 69, 0.884);
+                --google_symbol_color: white, white;
+                --google_symbol_firstColor: #E94335, #E94335;
+                --google_symbol_secondColor: #FABB06, #FABB06;
+                --google_symbol_thirdColor: #34A853, #34A853;
+                --google_symbol_fourthColor: #4285F3, #4285F3;
+            }
+        }
+        
+        @layer divider {
+            :root {
+                --divider_hr_bg_color: grey, #BCBCBC;
+                --divider_p_color: grey, #BCBCBC;
+            }
+        }
+    }
+
+    @layer properties {
+
+        @layer general {
+            section#main aside.pay section.container {
+                height: 100%;
+                width: 100%;
+                background-color: light-dark(var(--aside_pay_bg_color));
+                border-radius: 10px 0 0 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.102);
+            }
+    
+            section#main aside.pay section.container section.payment {
+                padding: 4vmin 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 80%;
+                margin: auto;
+            }
+        }
+
+        @layer googlePay {
+            section#main aside.pay section.container aside.google {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                height: max-content;
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay {
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: .4vmin;
+                border-radius: 3px;
+                width: 90%;
+                height: 4vmin;
+                font-size: .9em;
+                font-family: var(--Inter);
+                color: light-dark(var(--googlepay_button_color));
+                padding: .25vmin 0;
+                background-color: light-dark(var(--googlepay_button_bg_color));
+                border: none;
+                transition: .4s ease-in-out;
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay:hover {
+                background-color: light-dark(var(--googlepay_button_hover_bg_color));
+                border-radius: 5px;
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay svg {
+                height: 60%;
+                width: auto;
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay svg path {
+                color: light-dark(var(--google_symbol_color));
+                transition: .4s cubic-bezier(0.300, 0.885, 0.880, 1.275);
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay:hover svg path.red {
+                color: light-dark(var(--google_symbol_firstColor));
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay:hover svg path.yellow {
+                color: light-dark(var(--google_symbol_secondColor));
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay:hover svg path.green {
+                color: light-dark(var(--google_symbol_thirdColor));
+            }
+    
+            section#main aside.pay section.container aside.google button.googlepay:hover svg path.blue {
+                color: light-dark(var(--google_symbol_fourthColor));
+            }
+        }
+
+        @layer divider {
+            section#main aside.pay section.container aside.divider {
+                position: relative;
+                padding: 4vmin 0;
+                width: 90%;
+            }
+
+            section#main aside.pay section.container aside.divider hr {
+                background-color: light-dark(var(--divider_hr_bg_color));
+                border: none;
+                height: 1px;
+                width: 100%;
+            }
+
+            section#main aside.pay section.container aside.divider p {
+                    background-color: light-dark(var(--aside_pay_bg_color));
+                    color: light-dark(var(--divider_p_color));
+                    left: 50%;
+                    top: 50%;
+                    padding: 0 1vmin;
+                    font-family: var(--Inter);
+                    font-size: .8em;
+                    font-weight: bold;
+                    position: absolute;
+                    -webkit-transform: translate(-50%, -50%);
+                    -ms-transform: translate(-50%, -50%);
+                    transform: translate(-50%, -50%);
+                    white-space: nowrap;
+            }
+        }
+    }
+}
