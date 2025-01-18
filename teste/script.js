@@ -265,3 +265,22 @@ async function animateNumbers(elem, val, pad, skip) {
         }
     }
 }
+
+// inputs payment methods
+
+const paymentMethodsInputs = document.querySelectorAll('aside.methods aside.selector div.option label input');
+let anyPaymentMethodInputIsChecked = false;
+
+paymentMethodsInputs.forEach(elem => {
+    elem.addEventListener(("change"), () => {
+        verifyChecked(elem)
+    })
+})
+
+function verifyChecked(elem) {
+    paymentMethodsInputs.forEach(elem => {
+        elem.checked = false;
+    })
+
+    elem.checked = true;
+}
