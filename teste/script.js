@@ -268,19 +268,186 @@ async function animateNumbers(elem, val, pad, skip) {
 
 // inputs payment methods
 
+const paymentInputsMethods = ['card', 'pix']
+const paymentMethodsOptions = document.querySelectorAll('aside.methods aside.selector div.option');
 const paymentMethodsInputs = document.querySelectorAll('aside.methods aside.selector div.option label input');
 let anyPaymentMethodInputIsChecked = false;
+let selectedPaymentMethodInputIs;
 
-paymentMethodsInputs.forEach(elem => {
-    elem.addEventListener(("change"), () => {
-        verifyChecked(elem)
+paymentMethodsOptions.forEach(option => {
+    let elem = option.classList.toString().toLocaleLowerCase();
+
+    paymentInputsMethods.forEach(method => {
+        let verify = elem.search(method);
+
+        if (verify == -1) {
+            return;
+        }
+
+        let getThisLabel = document.querySelector(`aside.methods aside.selector div.option.${method} label`);
+        let getThisInput = document.querySelector(`aside.methods aside.selector div.option.${method} input`);
+
+        getThisLabel.htmlFor = `${method}RadioInput`;
+        getThisInput.id = `${method}RadioInput`;
+        getThisInput.classList.add(method);
     })
 })
 
-function verifyChecked(elem) {
+paymentMethodsInputs.forEach(elem => {
+    elem.addEventListener(("change"), () => {
+        verifyChecked(elem, undefined)
+    })
+})
+
+function verifyChecked(elem, mode) {
+
+    if (mode) {
+        let inputClasses = selectedPaymentMethodInputIs.classList.value;
+        let methodName;
+
+        paymentInputsMethods.forEach(method => {
+            let verify = inputClasses.search(method);
+
+            if (verify == -1) {
+                return;
+            }
+
+            return methodName = method;
+        })
+
+        return methodName;
+    }
+
     paymentMethodsInputs.forEach(elem => {
+        elem.classList.remove('marked')
+        selectedPaymentMethodInputIs = undefined;
         elem.checked = false;
     })
 
+    anyPaymentMethodInputIsChecked = true;
+    elem.classList.add('marked')
+    selectedPaymentMethodInputIs = elem;
     elem.checked = true;
+}
+
+// Set country
+
+let countries = [];
+
+let userCountry;
+
+const excludedRegions = [
+    "Europe",
+    "Asia",
+    "Africa",
+    "Oceania"
+];
+
+const excludedCountries = [
+    "Bolivia",
+    "Chile",
+    "Colombia",
+    "Ecuador",
+    "Paraguay",
+    "Peru",
+    "Suriname",
+    "Uruguay",
+    "Venezuela"
+];
+
+let countriesByRegion = {
+    SouthAmerica: [
+        "Argentina", "Bolivia", "Brazil", "Chile", "Colombia",
+        "Ecuador", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"
+    ],
+
+    NorthAmerica: [
+        "United States", "Canada", "Mexico"
+    ],
+
+    Europe: [
+        "United Kingdom", "Germany", "France", "Italy",
+        "Spain", "Portugal", "Netherlands", "Sweden",
+        "Norway", "Denmark"
+    ],
+
+    Asia: [
+        "China", "Japan", "India", "South Korea", "Indonesia",
+        "Saudi Arabia", "Turkey", "Thailand", "Vietnam", "Malaysia"
+    ],
+
+    Africa: [
+        "Nigeria", "Egypt", "South Africa", "Kenya", "Morocco",
+        "Ethiopia", "Ghana", "Algeria", "Uganda", "Tanzania"
+    ],
+
+    Oceania: [
+        "Australia", "New Zealand", "Fiji", "Papua New Guinea",
+        "Samoa", "Tonga", "Vanuatu", "Solomon Islands",
+        "Micronesia", "Palau"
+    ],
+
+    Exit: ["exit"]
+};
+
+for (let region in countriesByRegion) {
+    if (excludedRegions.includes(region)) {
+        continue;
+    }
+
+    let countries = countriesByRegion[region].sort();
+
+    countries.forEach(countryName => {
+        if (excludedCountries.includes(countryName)) {
+            return;
+        }
+
+        if (
+            region === "SouthAmerica" ||
+            region === "NorthAmerica" ||
+            region === "Europe" ||
+            region === "Asia" ||
+            region === "Africa" ||
+            region === "Oceania" ||
+            region === "Exit"
+        ) {
+            add(countryName, region);
+        } else {
+            console.error(`The region "${region}" does not exist. Please check the region name and try again.`);
+        }
+    });
+}
+
+function add(value, region) {
+    if (region === "Exit") {
+        countries.sort()
+        return;
+    }
+
+    countries.push(value.toLowerCase())
+}
+console.log(`selected countries:`)
+console.log(countries)
+
+fetch('https://get.geojs.io/v1/ip/country.json')
+    .then(response => response.json())
+    .then(json => {
+        userCountry = json.name.toLowerCase();
+        console.warn(json)
+        verifyCountry()
+    })
+    .catch(error => {
+        userCountry = 'brazil';
+        console.warn('Erro ao tentar verificar país do usuário: ', error);
+        console.warn('País padrao foi selecionado: ', userCountry)
+    });
+
+function verifyCountry() {
+    if (countries.includes(userCountry)) {
+        console.log('País do usuário:', userCountry);
+        return;
+    }
+
+    userCountry = 'brazil';
+    console.warn('País do usuário nao encontrado na lista país padrao selecionado:', userCountry);
 }
