@@ -271,6 +271,8 @@ async function animateNumbers(elem, val, pad, skip) {
 const paymentInputsMethods = ['card', 'pix']
 const paymentMethodsOptions = document.querySelectorAll('aside.methods aside.selector div.option');
 const paymentMethodsInputs = document.querySelectorAll('aside.methods aside.selector div.option label input');
+const paymentMethodsInputError = document.querySelector(`section#main aside.pay section.container form aside.methods p span.error`);
+const paymentMethodsErrorContent = document.querySelector(`section#main aside.pay section.container form aside.methods p span.error span.content`);
 let anyPaymentMethodInputIsChecked = false;
 let selectedPaymentMethodInputIs;
 
@@ -295,39 +297,49 @@ paymentMethodsOptions.forEach(option => {
 
 paymentMethodsInputs.forEach(elem => {
     elem.addEventListener(("change"), () => {
-        verifyChecked(elem, undefined)
+        verifyChecked(elem, true)
     })
 })
 
 function verifyChecked(elem, mode) {
+    paymentMethodsInputError.classList.remove('enabled')
 
     if (mode) {
-        let inputClasses = selectedPaymentMethodInputIs.classList.value;
-        let methodName;
-
-        paymentInputsMethods.forEach(method => {
-            let verify = inputClasses.search(method);
-
-            if (verify == -1) {
-                return;
-            }
-
-            return methodName = method;
+        paymentMethodsInputs.forEach(elem => {
+            elem.classList.remove('marked')
+            selectedPaymentMethodInputIs = undefined;
+            elem.checked = false;
         })
 
-        return methodName;
+        anyPaymentMethodInputIsChecked = true;
+        elem.classList.add('marked')
+        selectedPaymentMethodInputIs = elem;
+        elem.checked = true;
     }
 
-    paymentMethodsInputs.forEach(elem => {
-        elem.classList.remove('marked')
-        selectedPaymentMethodInputIs = undefined;
-        elem.checked = false;
+    let inputClasses;
+    let methodName;
+
+    try {
+        inputClasses = selectedPaymentMethodInputIs.classList.value;
+    } catch(err) {
+        paymentMethodsInputError.classList.add('enabled');
+        paymentMethodsErrorContent.textContent = 'Nenhum método selecionado';
+        inputClasses = false;
+        return inputClasses;
+    }
+
+    paymentInputsMethods.forEach(method => {
+        let verify = inputClasses.search(method);
+
+        if (verify == -1) {
+            return;
+        }
+
+        return methodName = method;
     })
 
-    anyPaymentMethodInputIsChecked = true;
-    elem.classList.add('marked')
-    selectedPaymentMethodInputIs = elem;
-    elem.checked = true;
+    return methodName;
 }
 
 // Set country

@@ -6,7 +6,11 @@ let checkout = {
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
-    let verifySelectedMethod = verifyChecked(undefined, true);
+    let verifySelectedMethod = verifyChecked(undefined, false);
+    let verifyAllInputs = verifyInformationInputs();
+    if(!verifyAllInputs) {
+      return;
+    }
     console.log(`After submit the result of inputs is: ${verifySelectedMethod}`);
     if(verifySelectedMethod == "pix") {
         processPayment("pix", { literal: "123456", base64: "imagemEmBase64", id: "payment_id_pix" });

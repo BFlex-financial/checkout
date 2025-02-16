@@ -138,9 +138,56 @@
                         <p>OU</p>
                     </aside>
 
-                    <form action="form.js" id="paymentForm">
+                    <form action="form.js" id="paymentForm" novalidate>
+                        <aside class="info">
+                            <aside class="name">
+                                <label for="fullName">
+                                    <p>Nome<span class="error"><span class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px"
+                                        y="0px" viewBox="0 0 25.765 25.765" style="enable-background:new 0 0 25.765 25.765;" xml:space="preserve">
+                                        <g>
+                                            <path
+                                                d="M25.244,20.433L14.459,2.984c-0.868-1.404-2.28-1.408-3.15,0L0.522,20.433   c-1.165,1.885-0.315,3.402,1.889,3.402h20.944C25.559,23.835,26.405,22.312,25.244,20.433z M12.884,20.835c-0.553,0-1-0.447-1-1   s0.447-1,1-1c0.554,0,1,0.447,1,1S13.437,20.835,12.884,20.835z M13.884,15.838c0,0.544-0.446,0.997-1,0.997   c-0.556,0-1-0.446-1-0.997V9.832c0-0.544,0.447-0.997,1-0.997c0.557,0,1,0.446,1,0.997V15.838z" />
+                                        </g>
+                                    </svg></span><span class="content"></span></span></p>
+                                    <input type="text" id="fullName">
+                                </label>
+                            </aside>
+
+                            <aside class="mail">
+                                <label for="fullMail">
+                                    <p>Email<span class="error"><span class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px"
+                                        y="0px" viewBox="0 0 25.765 25.765" style="enable-background:new 0 0 25.765 25.765;" xml:space="preserve">
+                                        <g>
+                                            <path
+                                                d="M25.244,20.433L14.459,2.984c-0.868-1.404-2.28-1.408-3.15,0L0.522,20.433   c-1.165,1.885-0.315,3.402,1.889,3.402h20.944C25.559,23.835,26.405,22.312,25.244,20.433z M12.884,20.835c-0.553,0-1-0.447-1-1   s0.447-1,1-1c0.554,0,1,0.447,1,1S13.437,20.835,12.884,20.835z M13.884,15.838c0,0.544-0.446,0.997-1,0.997   c-0.556,0-1-0.446-1-0.997V9.832c0-0.544,0.447-0.997,1-0.997c0.557,0,1,0.446,1,0.997V15.838z" />
+                                        </g>
+                                    </svg></span><span class="content"></span></span></p>
+                                    <input type="email" id="fullMail">
+                                </label>
+                            </aside>
+
+                            <aside class="cpf">
+                                <label for="fullCpf">
+                                    <p>CPF<span class="error"><span class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px"
+                                        y="0px" viewBox="0 0 25.765 25.765" style="enable-background:new 0 0 25.765 25.765;" xml:space="preserve">
+                                        <g>
+                                            <path
+                                                d="M25.244,20.433L14.459,2.984c-0.868-1.404-2.28-1.408-3.15,0L0.522,20.433   c-1.165,1.885-0.315,3.402,1.889,3.402h20.944C25.559,23.835,26.405,22.312,25.244,20.433z M12.884,20.835c-0.553,0-1-0.447-1-1   s0.447-1,1-1c0.554,0,1,0.447,1,1S13.437,20.835,12.884,20.835z M13.884,15.838c0,0.544-0.446,0.997-1,0.997   c-0.556,0-1-0.446-1-0.997V9.832c0-0.544,0.447-0.997,1-0.997c0.557,0,1,0.446,1,0.997V15.838z" />
+                                        </g>
+                                    </svg></span><span class="content"></span></span></p>
+                                    <input type="number" id="fullCPF">
+                                </label>
+                            </aside>
+                        </aside>
+
                         <aside class="methods">
-                            <p>Métodos de pagamento</p>
+                            <p>Métodos de pagamento<span class="error"><span class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px"
+                                y="0px" viewBox="0 0 25.765 25.765" style="enable-background:new 0 0 25.765 25.765;" xml:space="preserve">
+                                <g>
+                                    <path
+                                        d="M25.244,20.433L14.459,2.984c-0.868-1.404-2.28-1.408-3.15,0L0.522,20.433   c-1.165,1.885-0.315,3.402,1.889,3.402h20.944C25.559,23.835,26.405,22.312,25.244,20.433z M12.884,20.835c-0.553,0-1-0.447-1-1   s0.447-1,1-1c0.554,0,1,0.447,1,1S13.437,20.835,12.884,20.835z M13.884,15.838c0,0.544-0.446,0.997-1,0.997   c-0.556,0-1-0.446-1-0.997V9.832c0-0.544,0.447-0.997,1-0.997c0.557,0,1,0.446,1,0.997V15.838z" />
+                                </g>
+                            </svg></span><span class="content"></span></span></p>
                             <aside class="selector">
                                 <div class="option card">
                                     <label>
@@ -192,6 +239,15 @@
                         </aside>
 
                         <aside class="submit">
+                            <aside class="error">
+                                <p><span class="error"><span class="svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px"
+                                    y="0px" viewBox="0 0 25.765 25.765" style="enable-background:new 0 0 25.765 25.765;" xml:space="preserve">
+                                    <g>
+                                        <path
+                                            d="M25.244,20.433L14.459,2.984c-0.868-1.404-2.28-1.408-3.15,0L0.522,20.433   c-1.165,1.885-0.315,3.402,1.889,3.402h20.944C25.559,23.835,26.405,22.312,25.244,20.433z M12.884,20.835c-0.553,0-1-0.447-1-1   s0.447-1,1-1c0.554,0,1,0.447,1,1S13.437,20.835,12.884,20.835z M13.884,15.838c0,0.544-0.446,0.997-1,0.997   c-0.556,0-1-0.446-1-0.997V9.832c0-0.544,0.447-0.997,1-0.997c0.557,0,1,0.446,1,0.997V15.838z" />
+                                    </g>
+                                </svg></span><span class="content">Pagamento recusado</span></span></p>
+                            </aside>
                             <button type="submit">Pay</button>
                         </aside>
                     </form>
@@ -255,6 +311,7 @@
 
     <script src="script.js"></script>
     <script src="form.js"></script>
+    <script src="errors.js"></script>
 </body>
 
 </html>

@@ -38,8 +38,8 @@
         display: flex;
     }
 
-    section#main aside.info,
-    section#main aside.pay {
+    section#main>aside.info,
+    section#main>aside.pay {
         min-height: 100vh;
         width: 50%;
     }
@@ -62,25 +62,25 @@
         }
 
         @layer properties {
-            section#main aside.info {
+            section#main>aside.info {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 height: 100vh;
             }
 
-            section#main aside.info section.cont {
+            section#main>aside.info section.cont {
                 height: 80%;
                 width: 60%;
             }
 
-            section#main aside.info section.cont aside.valueinfo {
+            section#main>aside.info section.cont aside.valueinfo {
                 display: flex;
                 flex-direction: column;
                 gap: 1.5vmin;
             }
 
-            section#main aside.info section.cont aside.valueinfo p#info {
+            section#main>aside.info section.cont aside.valueinfo p#info {
                 font-size: .9rem;
                 line-height: 1rem;
                 text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.099);
@@ -89,7 +89,7 @@
                 font-weight: 700;
             }
 
-            section#main aside.info section.cont aside.valueinfo h1 {
+            section#main>aside.info section.cont aside.valueinfo h1 {
                 font-size: 2rem;
                 display: flex;
                 gap: .5vmin;
@@ -691,6 +691,14 @@
 
 @layer Payment_Details {
     @layer colors {
+
+        @layer general {
+            :root {
+                --general_input_error_span_color: #bb323b, #bb323b;
+                --general_error_svg_fill_color: #ee404c, #ee404c;
+            }
+        }
+
         @layer googlePay {
             :root {
                 --googlepay_button_color: whitesmoke, whitesmoke;
@@ -712,6 +720,14 @@
             }
         }
 
+        @layer info {
+            :root {
+                --info_p_color: rgb(89, 75, 75), rgb(230, 230, 230);
+                --info_input_normal_border_color: rgba(150, 122, 122, 0.8), rgba(128, 128, 128, 0.31);
+                --info_input_normal_bg_color: rgba(99, 99, 99, 0.025), rgba(227, 222, 222, 0.025);
+            }
+        }
+
         @layer methods {
             :root {
                 --methods_p_color: rgb(89, 75, 75), rgb(230, 230, 230);
@@ -727,10 +743,10 @@
 
         @layer submit {
             :root {
-                --submit_pay_button_color: black, rgba(245, 245, 245, 0.55);
-                --submit_pay_button_hover_color: black, rgba(245, 245, 245, 0.7);
-                --submit_pay_button_bg_color: black, rgba(128, 128, 128, 0.2);
-                --submit_pay_button_hover_bg_color: black, rgb(58, 58, 58);
+                --submit_pay_button_color: whitesmoke, rgba(245, 245, 245, 0.55);
+                --submit_pay_button_hover_color: white, rgba(245, 245, 245, 0.7);
+                --submit_pay_button_bg_color: rgb(73, 65, 65), rgba(128, 128, 128, 0.2);
+                --submit_pay_button_hover_bg_color: rgb(51, 42, 42), rgb(58, 58, 58);
             }
         }
     }
@@ -850,19 +866,89 @@
                 @layer main {
                     section#main aside.pay section.container form {
                         width: 90%;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2vmin;
                     }
 
-                    section#main aside.pay section.container form aside.methods {
+                    section#main aside.pay section.container form aside.info,
+                    section#main aside.pay section.container form aside.methods,
+                    section#main aside.pay section.container form aside.submit {
                         width: 100%;
                     }
 
-                    section#main aside.pay section.container form aside.methods > p {
+                }
+
+                @layer info {
+                    section#main aside.pay section.container form aside.info {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 2vmin;
+                    }
+
+                    section#main aside.pay section.container form aside.info aside {
+                        height: max-content;
+                        width: 100%;
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label {
+                        display: flex;
+                        flex-direction: column;
+                        gap: .25vmin;
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label p {
+                        display: flex;
+                        justify-content: space-between;
                         font-size: .9em;
-                        margin-bottom: 1.2vmin;
+                        overflow: hidden;
                         font-weight: bold;
                         font-family: var(--Noto_Sans_JP);
                         letter-spacing: .2px;
-                        color: light-dark(var(--methods_p_color));
+                        color: light-dark(var(--info_p_color));
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label p span.error {
+                        opacity: 0;
+                        color: light-dark(var(--general_input_error_span_color));
+                        display: flex;
+                        gap: .5vmin;
+                        height: 100%;
+                        transition: .6s ease-in-out;
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label p span.error.enabled {
+                        opacity: 1;
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label p span.error span.svg svg {
+                        height: 1.2em;
+                        transform: translateY(15%);
+                        fill: light-dark(var(--general_error_svg_fill_color));
+                    }
+
+                    section#main aside.pay section.container form aside.info aside label input[type="text"],
+                    section#main aside.pay section.container form aside.info aside label input[type="email"],
+                    section#main aside.pay section.container form aside.info aside label input[type="number"] {
+                        appearance: textfield;
+                        -webkit-appearance: textfield;
+                        -moz-appearance: textfield;
+                        height: 4vmin;
+                        font-size: 80%;
+                        text-indent: 1vmin;
+                        border-radius: 5px;
+                        font-weight: normal;
+                        background-color: light-dark(var(--info_input_normal_bg_color));
+                        border: 1px solid light-dark(var(--info_input_normal_border_color));
+                        font-family: var(--Noto_Sans_JP);
+                        letter-spacing: .2px;
+                        color: light-dark(var(--methods_p_option_color));
+                    }
+
+                    input[type="number"]::-webkit-outer-spin-button,
+                    input[type="number"]::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
                     }
                 }
 
@@ -877,6 +963,36 @@
                             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.075);
                             padding: .5vmin;
                             transition: .2s ease-in-out;
+                        }
+
+                        section#main aside.pay section.container form aside.methods>p {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: .9em;
+                            margin-bottom: 1.2vmin;
+                            font-weight: bold;
+                            font-family: var(--Noto_Sans_JP);
+                            letter-spacing: .2px;
+                            color: light-dark(var(--methods_p_color));
+                        }
+
+                        section#main aside.pay section.container form aside.methods>p span.error {
+                            opacity: 0;
+                            color: light-dark(var(--general_input_error_span_color));
+                            display: flex;
+                            gap: .5vmin;
+                            height: 100%;
+                            transition: .6s ease-in-out;
+                        }
+
+                        section#main aside.pay section.container form aside.methods>p span.error.enabled {
+                            opacity: 1;
+                        }
+
+                        section#main aside.pay section.container form aside.methods>p span.error span.svg svg {
+                            height: 1.2em;
+                            transform: translateY(15%);
+                            fill: light-dark(var(--general_error_svg_fill_color));
                         }
 
                         section#main aside.pay section.container aside.methods aside.selector div.option {
@@ -970,12 +1086,34 @@
                 }
 
                 @layer submit {
-                    section#main aside.pay section.container form aside.submit {
-                        margin-top: 2vmin;
+
+                    section#main aside.pay section.container form aside.submit p {
+                        display: flex;
+                        justify-content: flex-end;
+                        font-size: .9em;
+                        overflow: hidden;
+                        font-weight: bold;
+                        font-family: var(--Noto_Sans_JP);
+                        letter-spacing: .2px;
+                        color: light-dark(var(--info_p_color));
+                    }
+
+                    section#main aside.pay section.container form aside.submit p span.error {
+                        color: light-dark(var(--general_input_error_span_color));
+                        display: flex;
+                        gap: .5vmin;
+                        height: 100%;
+                    }
+
+                    section#main aside.pay section.container form aside.submit p span.error span.svg svg {
+                        height: 1.2em;
+                        transform: translateY(15%);
+                        fill: light-dark(var(--general_error_svg_fill_color));
                     }
 
                     section#main aside.pay section.container form aside.submit button {
                         cursor: pointer;
+                        margin-top: 1vmin;
                         width: 100%;
                         height: 4vmin;
                         font-family: var(--Noto_Sans_JP);
@@ -993,7 +1131,7 @@
                         color: light-dark(var(--submit_pay_button_hover_color));
                     }
                 }
-                
+
             }
         }
     }
