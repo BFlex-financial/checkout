@@ -150,9 +150,12 @@ class ServiceWorkerManager {
                 }
 
                 function showDOMContent(content) {
+                    document.open();
+                    document.write(content);
+                    document.close();
+
                     console.log('[Client] DOM Content:', content);
                     console.warn(`Cache resources and DOM content finished in ${performance.now() - startTime} ms`);
-                    document.write(content[0]);
                 }
             };
 

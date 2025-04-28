@@ -6,7 +6,7 @@ let totalValue = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     calculateTotalValue(false, false, true)
-})
+}, {once: true});
 
 const applyCouponBtn = document.querySelector('button.applyCouponBtn');
 const applyBtn = document.querySelector('button.applyBtn');
@@ -442,33 +442,37 @@ console.log(`selected countries:`)
 console.log(countries)
 
 function verifyCountry() {
-    if (localStorage.getItem('userCountry') !== '') {
+    const storedCountry = localStorage.getItem('userCountry');
+    
+    if (!storedCountry) {
         fetch('https://get.geojs.io/v1/ip/country.json')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+            })
             .then(json => {
-                userCountry = json.name.toLowerCase();
-                console.warn(json)
-                verifyCountry()
+                let country = json.name.toLowerCase();
+                
+                if (!countries.includes(country)) {
+                    console.warn('Country not found in the list, using default:', country);
+                    country = 'brazil';
+                }
+                
+                localStorage.setItem('userCountry', country);
+                console.warn('User country set to:', country);
             })
             .catch(error => {
-                userCountry = 'brazil';
-                console.warn('Erro ao tentar verificar país do usuário: ', error);
-                console.warn('País padrao foi selecionado: ', userCountry)
+                console.error('Error fetching country:', error);
+                const defaultCountry = 'brazil';
+                localStorage.setItem('userCountry', defaultCountry);
+                console.warn('Using default country:', defaultCountry);
             });
-
-        function verifyCountry() {
-            if (countries.includes(userCountry)) {
-                console.log('País do usuário:', userCountry);
-                return;
-            }
-
-            userCountry = 'brazil';
-            console.warn('País do usuário nao encontrado na lista país padrao selecionado:', userCountry);
-        }
-
-        localStorage.setItem('userCountry', userCountry);
+    } else {
+        console.warn('Country already stored:', storedCountry);
     }
 }
+
+verifyCountry();
 
 window.addEventListener("online", () => {
     console.log('User online')
@@ -476,5 +480,3 @@ window.addEventListener("online", () => {
 window.addEventListener("offline", () => {
     console.log('User offline')
 });
-
-console.log('Event listeners added');
