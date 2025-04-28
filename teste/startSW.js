@@ -6,6 +6,7 @@ let startTime;
 
 const resources = {
     local: {
+	html: ['./index.html'],
         css: ['./style.css'],
         javascript: [
             './script.js',
