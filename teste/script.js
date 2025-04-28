@@ -322,7 +322,7 @@ function verifyChecked(elem, mode) {
 
     try {
         inputClasses = selectedPaymentMethodInputIs.classList.value;
-    } catch(err) {
+    } catch (err) {
         paymentMethodsInputError.classList.add('enabled');
         paymentMethodsErrorContent.textContent = 'Nenhum método selecionado';
         inputClasses = false;
@@ -441,25 +441,40 @@ function add(value, region) {
 console.log(`selected countries:`)
 console.log(countries)
 
-fetch('https://get.geojs.io/v1/ip/country.json')
-    .then(response => response.json())
-    .then(json => {
-        userCountry = json.name.toLowerCase();
-        console.warn(json)
-        verifyCountry()
-    })
-    .catch(error => {
-        userCountry = 'brazil';
-        console.warn('Erro ao tentar verificar país do usuário: ', error);
-        console.warn('País padrao foi selecionado: ', userCountry)
-    });
-
 function verifyCountry() {
-    if (countries.includes(userCountry)) {
-        console.log('País do usuário:', userCountry);
-        return;
-    }
+    if (localStorage.getItem('userCountry') !== '') {
+        fetch('https://get.geojs.io/v1/ip/country.json')
+            .then(response => response.json())
+            .then(json => {
+                userCountry = json.name.toLowerCase();
+                console.warn(json)
+                verifyCountry()
+            })
+            .catch(error => {
+                userCountry = 'brazil';
+                console.warn('Erro ao tentar verificar país do usuário: ', error);
+                console.warn('País padrao foi selecionado: ', userCountry)
+            });
 
-    userCountry = 'brazil';
-    console.warn('País do usuário nao encontrado na lista país padrao selecionado:', userCountry);
+        function verifyCountry() {
+            if (countries.includes(userCountry)) {
+                console.log('País do usuário:', userCountry);
+                return;
+            }
+
+            userCountry = 'brazil';
+            console.warn('País do usuário nao encontrado na lista país padrao selecionado:', userCountry);
+        }
+
+        localStorage.setItem('userCountry', userCountry);
+    }
 }
+
+window.addEventListener("online", () => {
+    console.log('User online')
+});
+window.addEventListener("offline", () => {
+    console.log('User offline')
+});
+
+console.log('Event listeners added');

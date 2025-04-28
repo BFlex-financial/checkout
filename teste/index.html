@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width='device-width', initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        color-scheme: light dark;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: light-dark(white, rgb(20, 20, 20));
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    main#load {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1vmin;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    div.bars {
+        position: relative;
+        display: inline-flex;
+        gap: .8vmin;
+    }
+
+    div.bar {
+        width: 1.5vmin;
+        height: 8vmin;
+        transform-origin: bottom;
+        background-color: light-dark(#f5f5f5, #3f3e3e);
+        border-radius: 4px;
+        animation: loadingBars 2s infinite ease-in-out;
+    }
+
+    div.bar.one {
+        animation-delay: 0s;
+    }
+
+    div.bar.two {
+        animation-delay: .2s;
+    }
+
+    div.bar.three {
+        animation-delay: .4s;
+    }
+
+    div.bar.four {
+        animation-delay: .6s;
+    }
+
+    div.loadedBar {
+        position: absolute;
+        overflow: hidden;
+        bottom: -2.5vmin;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150%;
+        height: 1vmin;
+        transform-origin: bottom;
+        background-color: light-dark(#f5f5f5, #3f3e3e);
+        border-radius: 4px;
+        animation-delay: .8s;
+    }
+
+    div.loadedBar::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        height: 100%;
+        width: 50%;
+        border-radius: 1vmin;
+        scale: 1 1;
+        background-color: light-dark(#36414A, #145751a6);
+        transform-origin: left;
+        animation: loadedBar 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite;
+        /* cubic-bezier(0.175, 0.885, 0.32, 1.275) */
+    }
+
+    @keyframes loadedBar {
+        0% {
+            left: 0;
+            transform: scaleX(.2);
+        }
+
+        50% {
+            left: 50%;
+            transform: scaleX(1) translateX(-50%);
+        }
+
+        100% {
+            left: 100%;
+            transform: scaleX(.2);
+        }
+    }
+
+    @keyframes loadingBars {
+        0% {
+            transform: scaleY(1);
+        }
+        50% {
+            transform: scaleY(0.1);
+        }
+        100% {
+            transform: scaleY(1);
+        }
+    }
+
+</style>
+<body>
+    <main id="load">
+        <div class="bars">
+            <div class="bar one"></div>
+            <div class="bar two"></div>
+            <div class="bar three"></div>
+            <div class="bar four"></div>
+            <div class="loadedBar"></div>
+        </div>
+    </main>
+
+    <!-- <section class="quantity">
+        <menu id="quantity">
+            <section class="container">
+                <aside class="desc">
+                    <aside class="cont">
+                        <div>
+                            <img src="https://drogariasp.vteximg.com.br/arquivos/ids/435164-1000-1000/641693---energetico-monster-energy-473ml-spal.jpg?v=637496168469870000"
+                                alt="">
+                            <div class="container">
+                                <p>Atualizar item</p>
+                                <p class="name">Monster</p>
+                            </div>
+                        </div>
+
+                        <div class="close">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M6.2253 4.81108C5.83477 4.42056 5.20161 4.42056 4.81108 4.81108C4.42056 5.20161 4.42056 5.83477 4.81108 6.2253L10.5858 12L4.81114 17.7747C4.42062 18.1652 4.42062 18.7984 4.81114 19.1889C5.20167 19.5794 5.83483 19.5794 6.22535 19.1889L12 13.4142L17.7747 19.1889C18.1652 19.5794 18.7984 19.5794 19.1889 19.1889C19.5794 18.7984 19.5794 18.1652 19.1889 17.7747L13.4142 12L19.189 6.2253C19.5795 5.83477 19.5795 5.20161 19.189 4.81108C18.7985 4.42056 18.1653 4.42056 17.7748 4.81108L12 10.5858L6.2253 4.81108Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </div>
+                    </aside>
+                </aside>
+
+                <aside class="define">
+                    <section class="numbers">
+                        <button class="less">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                        <input type="number" id="quantityOfItems">
+                        <button class="more">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </button>
+                    </section>
+
+                    <section class="buttons">
+                        <button class="update">Atualizar</button>
+                        <button class="remove">Remover</button>
+                    </section>
+                </aside>
+            </section>
+        </menu>
+    </section> -->
+    <script src="startSW.js" defer="true"></script>
+
+</body>
+</html>

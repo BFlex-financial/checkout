@@ -1099,10 +1099,16 @@
                     }
 
                     section#main aside.pay section.container form aside.submit p span.error {
+                        opacity: 0;
                         color: light-dark(var(--general_input_error_span_color));
                         display: flex;
                         gap: .5vmin;
                         height: 100%;
+                        transition: .6s ease-in-out;
+                    }
+
+                    section#main aside.pay section.container form aside.submit p.enabled span {
+                        opacity: 1;
                     }
 
                     section#main aside.pay section.container form aside.submit p span.error span.svg svg {

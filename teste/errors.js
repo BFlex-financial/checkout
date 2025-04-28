@@ -1,6 +1,7 @@
 let informationInputsContainer = document.querySelectorAll('section#main aside.pay section.container form aside.info aside');
 let informationInputs = document.querySelectorAll('section#main aside.pay section.container form aside.info aside label input');
 let informationInputsError = document.querySelectorAll('section#main aside.pay section.container form aside.info aside label p span.error');
+let submitError = document.querySelector('section#main aside.pay section.container form aside.submit aside.error p');
 
 informationInputsContainer.forEach(elem => {
     const classes = Array.from(elem.classList).join('.');
@@ -10,7 +11,16 @@ informationInputsContainer.forEach(elem => {
     }
 });
 
-function verifyInformationInputs() {
+function verifyInformationInputs(isSubmit, error) {
+    if(isSubmit) {
+        let elem = submitError;
+        const errorContent = elem.querySelector('span.content');
+        elem.classList.add('enabled');
+        errorContent.textContent = 'O campo não pode estar vazio';
+        clearErrors();
+        return;
+    }
+
     let isValid = true;
 
     informationInputsError.forEach(elem => {
@@ -55,4 +65,14 @@ function verifyInformationInputs() {
     });
 
     return isValid;
+}
+
+function clearErrors() {
+    informationInputsError.forEach(elem => {
+        const errorContent = elem.querySelector('span.content');
+        elem.classList.remove('enabled');
+        if (errorContent) {
+            errorContent.textContent = '';
+        }
+    });
 }

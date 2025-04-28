@@ -8,7 +8,7 @@ form.addEventListener("submit", (event) => {
     event.preventDefault();
     let verifySelectedMethod = verifyChecked(undefined, false);
     let verifyAllInputs = verifyInformationInputs();
-    if(!verifyAllInputs) {
+    if(!verifyAllInputs || !verifySelectedMethod) {
       return;
     }
     console.log(`After submit the result of inputs is: ${verifySelectedMethod}`);
@@ -28,6 +28,8 @@ form.addEventListener("submit", (event) => {
             mes: "12",
           });
     }
+
+    setTimeout(() => {verifyInformationInputs(true)}, 1000);
 })
 
 function processPayment(method, paymentData = {}) {
@@ -135,4 +137,3 @@ function processPayment(method, paymentData = {}) {
       console.error("Método de pagamento inválido. Use 'pix' ou 'cartao'.");
     }
   }
-  
