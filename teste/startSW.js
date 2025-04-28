@@ -31,7 +31,6 @@ const resources = {
 
 class ServiceWorkerManager {
     #configs = {};
-    #register;
     #SW;
     #activePortIndex = 0;
 
@@ -41,7 +40,6 @@ class ServiceWorkerManager {
         if (type === 'resources' || 'DOM') {
             version = 1;
             this.#SW = './resourcesSW.js';
-            this.#register = true;
         } else {
             return console.warn('Invalid type. Expected "resources" or "DOM".');
         }
@@ -159,22 +157,31 @@ class ServiceWorkerManager {
             };
 
             port1.onmessageerror = () => {
-                console.log('[Cliente] Ocorreu um erro na comunicação');
+                console.log('[Client] Communication error');
             };
         }
     }
 
     async init(type, versionEquals) {
-        if ('serviceWorker' in navigator && this.#register && !versionEquals) {
+        if ('serviceWorker' in navigator && !versionEquals) {
             try {
                 const registration = await navigator.serviceWorker.register(this.#SW, {
                     scope: this.#configs.scope
                 });
                 this.#handleMessaging(type);
 
-                if (registration.waiting) {
-                    this.#reloadWithCache();
-                }
+                registration.addEventListener('updatefound', () => {
+                    const installingWorker = registration.installing;
+                    console.log('New service worker found:', installingWorker);
+                    installingWorker.addEventListener('statechange', () => {
+                        console.log('state change:', installingWorker);
+                        if (installingWorker.state === 'activated') {
+                            if (navigator.serviceWorker.controller) {
+                                this.#reloadWithCache();
+                            }
+                        }
+                    });
+                });
 
                 return registration;
             } catch (error) {
@@ -186,7 +193,7 @@ class ServiceWorkerManager {
     }
 
     #reloadWithCache() {
-        console.log('Recarregando para ativar service worker');
+        console.warn('Reloading for active service worker');
         setTimeout(() => {
             window.location.reload();
         }, 2000);
