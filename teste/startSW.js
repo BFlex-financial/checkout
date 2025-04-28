@@ -3,10 +3,16 @@ let DOMValid = false;
 let versionEquals = false;
 let version;
 let startTime;
+let cancel = false;
+const errorTextContent = document.querySelector('section#error div.errorContent p.error');
+const errorLoadingBars = document.querySelectorAll('div.bar');
+const errorLoadedBar = document.querySelector('div.loadedBar');
+const timingBar = document.querySelector('section#error div.errTiming');
+const errMenu = document.querySelector('menu.error')
 
 const resources = {
     local: {
-	html: ['./index.html'],
+        html: ['./index.html'],
         css: ['./style.css'],
         javascript: [
             './script.js',
@@ -14,6 +20,7 @@ const resources = {
             './form.js',
             './errors.js',
             './app.js',
+            './teste.js'
         ],
         remove: [
 
@@ -36,19 +43,29 @@ class ServiceWorkerManager {
     #activePortIndex = 0;
 
     constructor(type) {
-        if (!type && typeof type !== 'string') return console.warn('Type is required and should be a string', type);
-
-        if (type === 'resources' || 'DOM') {
-            version = 1;
-            this.#SW = './resourcesSW.js';
-        } else {
-            return console.warn('Invalid type. Expected "resources" or "DOM".');
+        if (!type || typeof type !== 'string') {
+            console.warn('Type is required and should be a string:', type);
+            this.#showError('Type is required and should be a string');
+            cancel = true;
+            return;
         }
+
+        if (type === 'resources' || type === 'DOM') {
+            version = Math.floor(Math.random() * 1000);
+            this.#SW = `./resourcesSW.js`;
+        } else {
+            console.warn('Invalid type. Expected "resources" or "DOM".', typeof type);
+            this.#showError('Invalid type. Expected "resources" or "DOM".');
+            cancel = true;
+            return;
+        }
+
+        if (cancel) return;
 
         (async () => {
             await this.#setupConfig(type);
             this.init(type, versionEquals);
-        })()
+        })();
 
         console.log('ServiceWorkerManager initialized');
     }
@@ -61,16 +78,7 @@ class ServiceWorkerManager {
         } else if (type === 'resources') {
             this.#configs = {
                 scope: './',
-                resources: {
-                    local: {
-                        css: resources.local.css,
-                        javascript: resources.local.javascript,
-                        remove: resources.local.remove
-                    },
-                    external: {
-                        allowed: resources.external.allowed
-                    }
-                }
+                resources
             }
         } else if (type === 'DOM') {
             this.#configs = {
@@ -111,6 +119,11 @@ class ServiceWorkerManager {
                     case 'PORT_CONFIRMATION':
                         console.log('Active Port:', this.#activePortIndex);
                         this.#activePortIndex = event.data.port;
+                        break;
+                    case 'ERROR':
+                        console.error('Error:', data.message);
+                        this.#showError(data.message);
+                        cancel = true;
                         break;
                     case 'VERSION_EQUALS':
                         console.warn('Versions equals:', version);
@@ -158,42 +171,87 @@ class ServiceWorkerManager {
                     console.log('[Client] DOM Content:', content);
                     console.warn(`Cache resources and DOM content finished in ${performance.now() - startTime} ms`);
                 }
+
             };
 
             port1.onmessageerror = () => {
                 console.log('[Client] Communication error');
+                cancel = true;
+                this.#showError('Communication error');
+                return;
             };
         }
     }
 
     async init(type, versionEquals) {
-        if ('serviceWorker' in navigator && !versionEquals) {
-            try {
-                const registration = await navigator.serviceWorker.register(this.#SW, {
-                    scope: this.#configs.scope
-                });
-                this.#handleMessaging(type);
+        if (!('serviceWorker' in navigator) || versionEquals || cancel) {
+            if (!('serviceWorker' in navigator)) {
+                this.#showError('Service workers not supported.');
+            } else if (cancel) {
+                this.#showError('Execution stopped due to an error.');
+            }
+            return;
+        }
 
+        try {
+            const registration = await navigator.serviceWorker.register(this.#SW, {
+                scope: this.#configs.scope
+            });
+
+            this.#handleMessaging(type);
+
+            const onUpdateFound = () => new Promise(resolve => {
                 registration.addEventListener('updatefound', () => {
                     const installingWorker = registration.installing;
                     console.log('New service worker found:', installingWorker);
+
                     installingWorker.addEventListener('statechange', () => {
-                        console.log('state change:', installingWorker);
                         if (installingWorker.state === 'activated') {
-                            if (navigator.serviceWorker.controller) {
-                                this.#reloadWithCache();
-                            }
+                            resolve(installingWorker);
                         }
                     });
                 });
+            });
 
-                return registration;
-            } catch (error) {
-                console.error('Erro ao registrar service worker:', error);
+            const activatedWorker = await onUpdateFound();
+            console.log('State changed to activated:', activatedWorker);
+
+            if (navigator.serviceWorker.controller) {
+                this.#reloadWithCache();
             }
-        } else {
-            console.log('Service workers não são suportados.');
+
+            return registration;
+        } catch (error) {
+            cancel = true;
+            console.error('Error registering Service Worker:', error);
+            this.#showError(`Error registering Service Worker: ${error.message}`);
+            throw error;
         }
+    }
+
+    async #showError(error) {
+        setTimeout(() => {
+            errorTextContent.textContent = error;
+            document.body.classList.add('error');
+
+            timingBar.classList.add('active');
+
+            errorLoadingBars.forEach(bar => {
+                setInterval(() => {
+                    errorLoadedBar.classList.add('error');
+                    bar.classList.toggle('error');
+                }, 2000)
+            })
+
+            setTimeout(() => {
+                timingBar.classList.remove('active');
+                errMenu.classList.add('disabled');
+                setTimeout(() => {
+                    errMenu('menu.error').classList.remove('disabled');
+                    errMenu('menu.error').classList.add('remove');
+                }, 280)
+            }, 2100)
+        }, 0) //TODO - put 1000
     }
 
     #reloadWithCache() {
@@ -207,11 +265,17 @@ class ServiceWorkerManager {
 const SWtypes = ['resources', 'DOM'];
 
 (async () => {
-    await SWtypes.forEach(type => {
+    for (const type of SWtypes) {
         new ServiceWorkerManager(type);
-    })
+        if (cancel) {
+            console.warn(`Execution stopped due to an error with type: ${type}`);
+            break;
+        }
+    }
 
-    startTime = performance.now();
+    if (!cancel) {
+        startTime = performance.now();
+    }
 })();
 
 function getLanguage() {

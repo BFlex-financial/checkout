@@ -340,7 +340,6 @@ self.addEventListener('message', (ev) => {
           try {
             const cache = await caches.open(CACHE_NAME);
 
-            // Verify and filter resources before caching
             const validResources = await Promise.all(
               resourcesToCache.map(async (resource) => {
                 try {
@@ -355,7 +354,6 @@ self.addEventListener('message', (ev) => {
 
             console.log('Resources to cache:', validResources);
 
-            // Try cache the valid resources
             await cache.addAll(validResources)
               .then(() => {
                 console.log('Successfully cached:', validResources);
@@ -371,21 +369,24 @@ self.addEventListener('message', (ev) => {
                 }
               });
 
-              port.postMessage({
-                type: 'CACHE_RESOURCES_FINISHED',
-                message: 'Cache updated successfully',
-              });
+            port.postMessage({
+              type: 'CACHE_RESOURCES_FINISHED',
+              message: 'Cache updated successfully',
+            });
 
-              resourcesToCache = [];
-              removeResources = [];
-
+            resourcesToCache = [];
+            removeResources = [];
           } catch (err) {
             console.error('Cache operation failed:', err);
+            port.postMessage({
+              type: 'ERROR',
+              message: 'Cache operation failed',
+            });
           }
 
           return
         }
-        
+
         port.postMessage({
           type: 'VERSION_EQUALS',
           content: lastDOM
@@ -410,33 +411,39 @@ self.addEventListener('message', (ev) => {
 
     ev.waitUntil(
       (async () => {
-        console.log('DOM request received:', config);
-        await findArraysInObject(config);
-        console.log('Languages requested:', DOMLanguagesRequested);
+        try {
+          console.log('DOM request received:', config);
+          await findArraysInObject(config);
+          console.log('Languages requested:', DOMLanguagesRequested);
 
-        DOMLanguagesRequested.forEach(lang => {
-          const htmlContent = DOMGenerator.makeDOM(lang);
-          DOMs.push(htmlContent);
-        });
+          DOMLanguagesRequested.forEach(lang => {
+            const htmlContent = DOMGenerator.makeDOM(lang);
+            DOMs.push(htmlContent);
+          });
 
-        lastDOM = DOMs
+          lastDOM = DOMs
+          throw new Error('Error in DOM generation');
+          port.postMessage({
+            type: 'DOM_CONTENT',
+            message: 'The DOM is ready',
+            content: DOMs
+          })
 
-        port.postMessage({
-          type: 'DOM_CONTENT',
-          message: 'The DOM is ready',
-          content: DOMs
-        })
-
-        DOMLanguagesRequested = [];
-        DOMs = [];
-
+          DOMLanguagesRequested = [];
+          DOMs = [];
+        } catch (err) {
+          port.postMessage({
+            type: 'ERROR',
+            message: 'DOM operation failed',
+          });
+        }
       })()
     );
   }
 })
 
 
-self.addEventListener('fetch', (ev) => {})
+self.addEventListener('fetch', (ev) => { })
 
 self.addEventListener('activate', (ev) => {
   clients.claim();

@@ -452,6 +452,7 @@ function verifyCountry() {
             })
             .then(json => {
                 let country = json.name.toLowerCase();
+                console.log(json)
                 
                 if (!countries.includes(country)) {
                     console.warn('Country not found in the list, using default:', country);
