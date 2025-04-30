@@ -4,11 +4,6 @@ let versionEquals = false;
 let version;
 let startTime;
 let cancel = false;
-const errorTextContent = document.querySelector('section#error div.errorContent p.error');
-const errorLoadingBars = document.querySelectorAll('div.bar');
-const errorLoadedBar = document.querySelector('div.loadedBar');
-const timingBar = document.querySelector('section#error div.errTiming');
-const errMenu = document.querySelector('menu.error')
 
 const resources = {
     local: {
@@ -51,7 +46,7 @@ class ServiceWorkerManager {
         }
 
         if (type === 'resources' || type === 'DOM') {
-            version = Math.floor(Math.random() * 1000);
+            version = 1;
             this.#SW = `./resourcesSW.js`;
         } else {
             console.warn('Invalid type. Expected "resources" or "DOM".', typeof type);
@@ -233,25 +228,16 @@ class ServiceWorkerManager {
         setTimeout(() => {
             errorTextContent.textContent = error;
             document.body.classList.add('error');
-
+            errMenu.classList.add('active');
             timingBar.classList.add('active');
 
-            errorLoadingBars.forEach(bar => {
-                setInterval(() => {
-                    errorLoadedBar.classList.add('error');
-                    bar.classList.toggle('error');
-                }, 2000)
-            })
-
             setTimeout(() => {
-                timingBar.classList.remove('active');
-                errMenu.classList.add('disabled');
+                errMenu.classList.remove('active');
                 setTimeout(() => {
-                    errMenu('menu.error').classList.remove('disabled');
-                    errMenu('menu.error').classList.add('remove');
-                }, 280)
-            }, 2100)
-        }, 0) //TODO - put 1000
+                    errMenu.classList.add('remove')
+                }, 300)
+            }, 2200);
+        }, 1000) //TODO - put 1000
     }
 
     #reloadWithCache() {

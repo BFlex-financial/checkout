@@ -27,19 +27,24 @@
         width: 100vw;
     }
 
-    menu.error {
+    menu.error,
+    menu.pass {
+        opacity: 0;
         transition: .25s ease-in-out;
     }
 
-    menu.error.disabled {
-        opacity: 0;
+    menu.error.active,
+    menu.pass.active {
+        opacity: 1;
     }
 
-    menu.error.remove {
+    menu.error.remove,
+    menu.pass.remove {
         display: none;
     }
 
-    section#error {
+    section#error,
+    section#pass {
         position: absolute;
         top: 5%;
         left: 50%;
@@ -59,7 +64,13 @@
         transition: .2s ease-in-out;
     }
 
-    body.error section#error {
+    section#pass {
+        opacity: 1;
+        background-color: light-dark(rgba(192, 73, 73, 0.801), rgb(72, 116, 72));
+    }
+
+    body.error section#error,
+    body.pass section#pass {
         opacity: 1;
         scale: 1;
     }
@@ -69,7 +80,8 @@
         transform: translateX(-50%) scale(1.05);
     }
 
-    section#error div.errTiming {
+    section#error div.errTiming,
+    section#pass div.passTime {
         position: absolute;
         top: 0;
         left: 0;
@@ -81,24 +93,28 @@
         background-color: light-dark(red, rgba(255, 255, 255, 0.582));
     }
 
-    section#error div.errTiming.active {
+    section#error div.errTiming.active,
+    section#pass div.passTime.active {
         opacity: 1;
-        animation: timingBar 2s ease-in-out;
+        animation: timingBar 2s ease-in-out forwards;
     }
 
-    section#error div.img {
+    section#error div.img,
+    section#pass div.img {
         height: 100%;
         display: inline-flex;
         align-items: center;
     }
 
-    section#error div.img svg {
+    section#error div.img svg,
+    section#pass div.img svg {
         width: 100%;
         height: 3vmin;
         fill: light-dark(#36414A, rgba(235, 234, 234, 0.952));
     }
 
-    section#error div.errorContent {
+    section#error div.errorContent,
+    section#pass div.passContent {
         width: 100%;
         height: 100%;
         display: flex;
@@ -108,7 +124,8 @@
         color: light-dark(#36414A, rgba(235, 234, 234, 0.952));
     }
 
-    section#error div.errorContent p.error {
+    section#error div.errorContent p.error,
+    section#pass div.passContent p.pass {
         font-size: 1.5vmin;
         font-weight: 600;
         color: light-dark(#36414A, rgba(235, 234, 234, 0.952));
@@ -158,13 +175,8 @@
     }
 
     body.error div.bar {
-        animation: none;
+        animation-play-state: paused;
         background-color: light-dark(rgb(197, 95, 95), rgb(145, 62, 62));
-        transform: scaleY(0.1);
-    }
-
-    body.error div.bar.error {
-        transform: scaleY(1);
     }
 
     div.bar.one {
@@ -217,12 +229,7 @@
 
     body.error div.loadedBar::after {
         background-color: light-dark(rgb(189, 84, 84), rgb(145, 62, 62));
-        animation: none;
         left: 50%;
-        transform: scaleX(1) translateX(-50%);
-    }
-
-    body.error div.loadedBar.error::after {
         animation: errorLoadedBar 1s ease-in-out infinite;
     }
 
@@ -310,6 +317,21 @@
         </section>
     </menu>
 
+    <menu class="pass">
+        <section id="pass">
+            <div class="passTime"></div>
+            <div class="img">
+                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="currentColor"
+                        d="M512 64a448 448 0 110 896 448 448 0 010-896zm-55.808 536.384l-99.52-99.584a38.4 38.4 0 10-54.336 54.336l126.72 126.72a38.272 38.272 0 0054.336 0l262.4-262.464a38.4 38.4 0 10-54.272-54.336L456.192 600.384z" />
+                </svg>
+            </div>
+            <div class="passContent">
+                <p class="pass"></p>
+            </div>
+        </section>
+    </menu>
+
     <main id="load">
         <div class="bars">
             <div class="bar one"></div>
@@ -373,18 +395,60 @@
     </section> -->
 
     <script>
-        document.querySelector('menu.error div.button').addEventListener('click', (ev) => {
-            if(ev.target.closest('menu.error')) {
-                ev.target.closest('menu.error').classList.add('disabled');
+        const errorTextContent = document.querySelector('section#error div.errorContent p.error');
+        const errTimingBar = document.querySelector('section#error div.errTiming');
+        const errMenu = document.querySelector('menu.error');
+
+        const passTextContent = document.querySelector('section#pass div.passContent p.pass');
+        const passTimingBar = document.querySelector('section#pass div.passTime');
+        const passMenu = document.querySelector('menu.pass');
+
+        const js = document.createElement('script');
+        js.src = 'startSW.js'
+
+        if (!navigator.onLine) {
+            setTimeout(() => {
+                errorTextContent.textContent = 'You are offline';
+                document.body.classList.add('error');
+                errMenu.classList.add('active');
+                errTimingBar.classList.add('active');
+
                 setTimeout(() => {
-                    ev.target.closest('menu.error').classList.remove('disabled');
+                    errMenu.classList.remove('active');
+                    setTimeout(() => {
+                        errMenu.classList.add('remove')
+                    }, 300)
+                }, 2200);
+
+                window.addEventListener('online', () => {
+                    passTextContent.textContent = 'You are online again';
+                    document.body.classList.remove('error');
+                    document.body.classList.add('pass');
+                    passMenu.classList.add('active');
+                    passTimingBar.classList.add('active');
+
+                    setTimeout(() => {
+                        passMenu.classList.remove('active');
+                        setTimeout(() => {
+                            passMenu.classList.add('remove');
+                            document.body.append(js);
+                        }, 300)
+                    }, 2200);
+                })
+            }, 1000)
+        } else {
+            document.body.append(js);
+        }
+
+        document.querySelector('menu.error div.button').addEventListener('click', (ev) => {
+            if (ev.target.closest('menu.error')) {
+                ev.target.closest('menu.error').classList.remove('active');
+                setTimeout(() => {
                     ev.target.closest('menu.error').classList.add('remove');
                 }, 280)
             }
         })
     </script>
-    <script src="startSW.js" defer="true"></script>
-
 </body>
 
 </html>

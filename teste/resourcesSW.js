@@ -422,7 +422,7 @@ self.addEventListener('message', (ev) => {
           });
 
           lastDOM = DOMs
-          throw new Error('Error in DOM generation');
+
           port.postMessage({
             type: 'DOM_CONTENT',
             message: 'The DOM is ready',
@@ -443,15 +443,32 @@ self.addEventListener('message', (ev) => {
 })
 
 
-self.addEventListener('fetch', (ev) => { })
+self.addEventListener('fetch', (ev) => {
+  console.log('Your fetch is', ev.request.url)
+  ev.respondWith(
+    caches.match(ev.request)
+      .then(response => {
+        return response || fetch(ev.request);
+      })
+      .catch(() => {
+        if (ev.request.mode === 'navigate') {
+          return caches.match('./index.html');
+        }
+      })
+  );
+});
 
 self.addEventListener('activate', (ev) => {
+  ev.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      );
+    })
+  );
   clients.claim();
-  clients.matchAll().then(clientList => {
-    const clientIds = clientList.map(client => client.id);
-    console.log('Controlled clients:', clientIds);
-  })
-})
+});
 
 function findArraysInObject(obj, path = '') {
   for (const key in obj) {
