@@ -10,16 +10,18 @@ let lastDOM;
 
 class DOMGenerator {
   static makeDOM(language) {
-    let html = `
-  <!DOCTYPE html>
-<html lang="en">
+    let htmlObj = {
+      head: `
+          <!DOCTYPE html>
+<html lang="${language}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width='device-width', initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Checkout</title>
 </head>
-<body>
+      `,
+      body: `<body>
 <section id="main">
       <aside class="info">
           <section class="cont">
@@ -270,10 +272,13 @@ class DOMGenerator {
   <script src="errors.js"></script>
   <script src="form.js"></script>
   </body>
-</html>
-  `.replace(/\s+/g, ' ').trim();
+</html>`,
+      generate() {
+        return (this.head + this.body).replace(/\s+/g, ' ').trim();
+      }
+    }
 
-    return html
+    return htmlObj.generate()
   }
 }
 

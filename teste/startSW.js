@@ -88,7 +88,6 @@ class ServiceWorkerManager {
     #handleMessaging(type) {
         if (navigator.serviceWorker.controller) {
             console.log('we have a service worker installed');
-            console.log(this.#configs);
 
             const name = `APP_${type.toUpperCase()}`;
             console.log(name);
@@ -229,7 +228,7 @@ class ServiceWorkerManager {
             errorTextContent.textContent = error;
             document.body.classList.add('error');
             errMenu.classList.add('active');
-            timingBar.classList.add('active');
+            errTimingBar.classList.add('active');
 
             setTimeout(() => {
                 errMenu.classList.remove('active');

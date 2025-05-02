@@ -176,20 +176,18 @@ async function toggleCouponInputs(btnValid) {
             applyCouponToggleValid = false;
         }, 200)
     } else if (btnValid && !applyCouponToggleValid) {
-        applyCouponBtnValid = false;
         applyCouponToggleValid = true;
         couponInputCont.style.display = 'inline';
         applyCouponBtn.classList.remove('enabled')
 
         setTimeout(() => {
             applyCouponBtn.style.display = 'none';
-            applyCouponBtnValid = true;
         }, 500)
 
         setTimeout(() => {
             couponInputCont.classList.toggle('active');
             setTimeout(() => {
-                applyCouponInput.focus()
+                couponInput.focus()
             }, 600)
         }, 400)
     }
@@ -215,11 +213,10 @@ function calculateTotalValue(coupon, pad, skip) {
 
 async function animateNumbers(elem, val, pad, skip) {
     let value = val.toString();
-    let isDecimal = true;
 
     if (!value.includes('.')) {
         isDecimal = false;
-        value = value.concat('.00')
+        value = value.concat('.00');
     }
 
     let int = elem.firstElementChild;
