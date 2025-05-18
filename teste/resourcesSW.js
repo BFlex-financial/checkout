@@ -3,13 +3,16 @@ let CACHE_NAME;
 let ALLOWED_DOMAINS = [];
 
 let resourcesToCache = [];
+let CSSresources = [];
+let JSresources = [];
 let removeResources = [];
 let DOMLanguagesRequested = [];
+let allowDOM = false;
 let DOMs = [];
 let lastDOM;
 
 class DOMGenerator {
-  static makeDOM(language) {
+  static async makeDOM(language) {
     let htmlObj = {
       head: `
           <!DOCTYPE html>
@@ -17,9 +20,11 @@ class DOMGenerator {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width='device-width', initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <title>Checkout</title>
 </head>
+      `,
+      style: `
+      <style>${'nop'}</style>
       `,
       body: `<body>
 <section id="main">
@@ -274,7 +279,14 @@ class DOMGenerator {
   </body>
 </html>`,
       generate() {
-        return (this.head + this.body).replace(/\s+/g, ' ').trim();
+        resourcesToCache.flatMap(resource => {
+          let fileName = resource.split('/').pop();
+          let fileType = resource.split('.').pop();
+          console.error(resource)
+          console.error(fileType)
+          getFileContentFromCache(fileName)
+        })
+        return (this.head + this.style + this.body).replace(/\s+/g, ' ').trim();
       }
     }
 
@@ -282,7 +294,7 @@ class DOMGenerator {
   }
 }
 
-self.addEventListener('install', (ev) => {
+self.addEventListener('install', () => {
   self.skipWaiting();
 })
 
@@ -321,6 +333,9 @@ self.addEventListener('message', (ev) => {
           CACHE_VERSION = version;
           CACHE_NAME = `BFlex_checkout_v${CACHE_VERSION}`;
           console.log('New version:', CACHE_VERSION);
+
+          resourcesToCache.push(...CSSresources, ...JSresources);
+
           console.log(resourcesToCache)
           console.log(removeResources)
 
@@ -374,10 +389,15 @@ self.addEventListener('message', (ev) => {
                 }
               });
 
+              getFileContentFromCache('style.css')
+              console.log(CACHE_NAME)
+
             port.postMessage({
               type: 'CACHE_RESOURCES_FINISHED',
               message: 'Cache updated successfully',
             });
+
+            allowDOM = true;
 
             resourcesToCache = [];
             removeResources = [];
@@ -421,12 +441,29 @@ self.addEventListener('message', (ev) => {
           await findArraysInObject(config);
           console.log('Languages requested:', DOMLanguagesRequested);
 
+          if(!allowDOM) {
+            await new Promise(resolve => {
+              const checkAllowDOM = () => {
+                if(allowDOM) {
+                  resolve();
+                } else {
+                  setTimeout(checkAllowDOM, 100);
+                }
+              };
+              checkAllowDOM();
+            });
+          }
+
+          console.warn(`allowDOM: ${allowDOM}`)
+
           DOMLanguagesRequested.forEach(lang => {
             const htmlContent = DOMGenerator.makeDOM(lang);
             DOMs.push(htmlContent);
           });
 
           lastDOM = DOMs
+
+          console.log(DOMs)
 
           port.postMessage({
             type: 'DOM_CONTENT',
@@ -490,7 +527,14 @@ function findArraysInObject(obj, path = '') {
                 let fileName = file.split('/').pop().split('.');
                 console.log(fileName)
                 if (resourcesToCache.indexOf(file) === -1 && fileName.length > 1) {
-                  resourcesToCache.push(file);
+                  console.warn(`File extension ${fileName[1]}`)
+                  if (fileName[1].includes('js')) {
+                    JSresources.push(file);
+                  } else if (fileName[1].includes('css')) {
+                    CSSresources.push(file);
+                  } else {
+                    resourcesToCache.push(file);
+                  }
                 } else if (fileName.length === 1) {
                   console.warn('File extension missing:', file);
                   return
@@ -530,4 +574,18 @@ function findArraysInObject(obj, path = '') {
       }
     }
   }
+}
+
+function getFileContentFromCache(file) {
+  caches.open(CACHE_NAME).then(cache => {
+    cache.match(file).then(response => {
+      if (response) {
+        response.text().then(content => {
+          console.log('File content:', content);
+        });
+      } else {
+        console.error('Error on match file:', file)
+      }
+    });
+  })
 }
