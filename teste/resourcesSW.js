@@ -10,9 +10,10 @@ let DOMLanguagesRequested = [];
 let allowDOM = false;
 let DOMs = [];
 let lastDOM;
+let cssContent;
 
 class DOMGenerator {
-  static async makeDOM(language) {
+  static async makeDOM(language, style) {
     let htmlObj = {
       head: `
           <!DOCTYPE html>
@@ -24,7 +25,7 @@ class DOMGenerator {
 </head>
       `,
       style: `
-      <style>${'nop'}</style>
+      <style>${style}</style>
       `,
       body: `<body>
 <section id="main">
@@ -279,13 +280,6 @@ class DOMGenerator {
   </body>
 </html>`,
       generate() {
-        resourcesToCache.flatMap(resource => {
-          let fileName = resource.split('/').pop();
-          let fileType = resource.split('.').pop();
-          console.error(resource)
-          console.error(fileType)
-          getFileContentFromCache(fileName)
-        })
         return (this.head + this.style + this.body).replace(/\s+/g, ' ').trim();
       }
     }
@@ -389,8 +383,10 @@ self.addEventListener('message', (ev) => {
                 }
               });
 
-              getFileContentFromCache('style.css')
-              console.log(CACHE_NAME)
+            getFileContentFromCache('style.css').then(text => {
+              cssContent = text;
+            });
+            console.log(CACHE_NAME)
 
             port.postMessage({
               type: 'CACHE_RESOURCES_FINISHED',
@@ -408,8 +404,22 @@ self.addEventListener('message', (ev) => {
               message: 'Cache operation failed',
             });
           }
+          return;
+        }
 
-          return
+        if (!lastDOM || typeof lastDOM !== 'string') {
+          port.postMessage({
+            type: 'ERROR',
+            message: 'LastDOM invalid',
+          });
+
+          console.error('LastDOM invalid, wipping and reloading cache');
+          await caches.keys().then(key => {
+            return key.forEach(cache => {
+              caches.delete(cache);
+            })
+          })
+          return;
         }
 
         port.postMessage({
@@ -441,10 +451,10 @@ self.addEventListener('message', (ev) => {
           await findArraysInObject(config);
           console.log('Languages requested:', DOMLanguagesRequested);
 
-          if(!allowDOM) {
+          if (!allowDOM) {
             await new Promise(resolve => {
               const checkAllowDOM = () => {
-                if(allowDOM) {
+                if (allowDOM) {
                   resolve();
                 } else {
                   setTimeout(checkAllowDOM, 100);
@@ -456,19 +466,19 @@ self.addEventListener('message', (ev) => {
 
           console.warn(`allowDOM: ${allowDOM}`)
 
-          DOMLanguagesRequested.forEach(lang => {
-            const htmlContent = DOMGenerator.makeDOM(lang);
-            DOMs.push(htmlContent);
+          await DOMLanguagesRequested.forEach(async lang => {
+            const htmlContent = DOMGenerator.makeDOM(lang, cssContent);
+            await htmlContent.then(content => {
+              DOMs.push(content);
+            });
           });
 
-          lastDOM = DOMs
-
-          console.log(DOMs)
+          lastDOM = DOMs[0];
 
           port.postMessage({
             type: 'DOM_CONTENT',
             message: 'The DOM is ready',
-            content: DOMs
+            content: lastDOM
           })
 
           DOMLanguagesRequested = [];
@@ -577,11 +587,11 @@ function findArraysInObject(obj, path = '') {
 }
 
 function getFileContentFromCache(file) {
-  caches.open(CACHE_NAME).then(cache => {
-    cache.match(file).then(response => {
+  return caches.open(CACHE_NAME).then(cache => {
+    return cache.match(file).then(response => {
       if (response) {
-        response.text().then(content => {
-          console.log('File content:', content);
+        return response.text().then(content => {
+          return content;
         });
       } else {
         console.error('Error on match file:', file)
